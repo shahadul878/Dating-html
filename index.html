@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -30,7 +31,9 @@
        <!-- Main Header -->
        <header class="main-header">
            <div class="nav-content">
-               <div class="logo">LOGO HERE</div>
+               <div class="logo">
+                   <img src="assets/images/logo.webp" alt="Dating Logo">
+               </div>
                <nav>
                    <ul class="nav-menu">
                        <li><a href="#home">Home</a></li>
@@ -113,12 +116,13 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+        <div class="animated-overlay"></div>
         <div class="hero-content">
             <div class="hero-form">
                 <div class="form-header">
                     <h2>Where Love Begins</h2>
                 </div>
-                <div class="form-content">
+                <div class="form-content" id="step1">
                     <div class="form-question">
                         <p>Have you ever tried online dating?</p>
                     </div>
@@ -137,30 +141,118 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
+                
+                <!-- Step 2: What are you looking for? -->
+                <div class="form-content" id="step2" style="display: none;">
+                    <div class="form-question">
+                        <p>What are you looking for?</p>
+                    </div>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="contacts" name="looking-for" value="contacts">
+                            <label for="contacts">Nice contacts</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="relationship" name="looking-for" value="relationship">
+                            <label for="relationship">A serious relationship</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="unsure" name="looking-for" value="unsure">
+                            <label for="unsure">I'm not sure yet</label>
+                        </div>
+                    </div>
+                                         <div class="form-navigation">
+                         <button type="button" class="back-btn" id="backToStep1">
+                             <i class="fas fa-arrow-left"></i> Back
+                         </button>
+                     </div>
+                 </div>
+                 
+                 <!-- Step 3: I am / I am looking for -->
+                 <div class="form-content" id="step3" style="display: none;">
+                     <div class="form-question">
+                         <p>What are you looking for?</p>
+                     </div>
+                     <div class="radio-group-horizontal">
+                         <div class="radio-option">
+                             <input type="radio" id="iam" name="identity" value="iam" checked>
+                             <label for="iam">I am</label>
+                         </div>
+                         <div class="radio-option">
+                             <input type="radio" id="looking-for" name="identity" value="looking-for">
+                             <label for="looking-for">I am looking for</label>
+                         </div>
+                     </div>
+                     <div class="radio-group">
+                         <div class="radio-option">
+                             <input type="radio" id="woman" name="preference" value="woman">
+                             <label for="woman">A woman</label>
+                         </div>
+                         <div class="radio-option">
+                             <input type="radio" id="man" name="preference" value="man">
+                             <label for="man">A Man</label>
+                         </div>
+                         <div class="radio-option">
+                             <input type="radio" id="non-binary" name="preference" value="non-binary">
+                             <label for="non-binary">non-binary singles</label>
+                         </div>
+                     </div>
+                     <div class="form-navigation">
+                         <button type="button" class="back-btn" id="backToStep2">
+                             <i class="fas fa-arrow-left"></i> Back
+                         </button>
+                     </div>
+                 </div>
+                 
+                 <!-- Step 4: Sign Up Form -->
+                 <div class="form-content" id="step4" style="display: none;">
+                     <div class="form-question">
+                         <h3>Sign Up here</h3>
+                     </div>
+                     <div class="signup-form">
+                         <div class="form-group">
+                             <input type="email" id="email" name="email" placeholder="My email address" required>
+                         </div>
+                         <div class="form-group">
+                             <input type="password" id="password" name="password" placeholder="Create password" required>
+                         </div>
+                         <button type="submit" class="signup-btn primary">Register for free</button>
+                         <div class="form-separator">
+                             <span>or</span>
+                         </div>
+                         <button type="button" class="signup-btn google">
+                             <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="google-logo">
+                             Sign Up with Google
+                         </button>
+                         <div class="consent-text">
+                             <p>By clicking the registration button, I consent to the processing of my personal and desired gender information for partner search purposes.</p>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </section>
 
     <!-- Feature Blocks -->
     <section class="features">
         <div class="features-grid">
             <div class="feature-block pink">
                 <div class="feature-icon">
-                    <i class="fas fa-heart"></i>
+                    <img src="assets/images/healty-dating.svg" alt="Healthy Dating Icon">
                 </div>
                 <h3 class="feature-title">Healthy Dating</h3>
                 <p class="feature-desc">Wir glauben an besseres Dating - mit mehr Wertschätzung, Authentizität und Spaß.</p>
             </div>
             <div class="feature-block">
                 <div class="feature-icon">
-                    <i class="fas fa-comments"></i>
+                    <img src="assets/images/dating-perspective.svg" alt="Dating with Perspective Icon">
                 </div>
                 <h3 class="feature-title">Dating with perspective</h3>
                 <p class="feature-desc">Wir glauben an besseres Dating - mit mehr Wertschätzung, Authentizität und Spaß.</p>
             </div>
             <div class="feature-block dark">
                 <div class="feature-icon">
-                    <i class="fas fa-search"></i>
+                    <img src="assets/images/network.svg" alt="Partner Search Icon">
                 </div>
                 <h3 class="feature-title">Partner search that feels good</h3>
                 <p class="feature-desc">Wir glauben an besseres Dating - mit mehr Wertschätzung, Authentizität und Spaß.</p>
@@ -172,7 +264,7 @@
     <section class="mission" id="about">
         <div class="mission-content">
             <div class="mission-image">
-                <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Happy couple">
+                <img src="assets/images/our-mission.webp" alt="Happy couple">
             </div>
             <div class="mission-text">
                 <h2>Our mission: Let's date happy!</h2>
@@ -190,42 +282,42 @@
             <div class="why-grid">
                 <div class="why-card">
                     <div class="why-card-icon">
-                        <i class="fas fa-mobile-alt"></i>
+                        <img src="assets/images/dating-app.svg" alt="Dating App Icon">
                     </div>
                     <h3 class="why-card-title">We bring more authenticity to dating.</h3>
                     <p class="why-card-desc">We believe that dating is only fun with genuine profiles. That's why you'll only find verified profiles on our site, and you can only be contacted by singles who have completed at least 50% of their profile.</p>
                 </div>
                 <div class="why-card">
                     <div class="why-card-icon">
-                        <i class="fas fa-search"></i>
+                        <img src="assets/images/why-card-icon-1.svg" alt="Why Card Icon 1">
                     </div>
                     <h3 class="why-card-title">We bring more authenticity to dating.</h3>
                     <p class="why-card-desc">We believe that dating is only fun with genuine profiles. That's why you'll only find verified profiles on our site, and you can only be contacted by singles who have completed at least 50% of their profile.</p>
                 </div>
                 <div class="why-card">
                     <div class="why-card-icon">
-                        <i class="fas fa-comment-dots"></i>
+                        <img src="assets/images/why-card-icon-2.svg" alt="Why Card Icon 2">
                     </div>
                     <h3 class="why-card-title">We bring more authenticity to dating.</h3>
                     <p class="why-card-desc">We believe that dating is only fun with genuine profiles. That's why you'll only find verified profiles on our site, and you can only be contacted by singles who have completed at least 50% of their profile.</p>
                 </div>
                 <div class="why-card">
                     <div class="why-card-icon">
-                        <i class="fas fa-bullseye"></i>
+                        <img src="assets/images/why-card-icon-3.svg" alt="Why Card Icon 3">
                     </div>
                     <h3 class="why-card-title">We bring more authenticity to dating.</h3>
                     <p class="why-card-desc">We believe that dating is only fun with genuine profiles. That's why you'll only find verified profiles on our site, and you can only be contacted by singles who have completed at least 50% of their profile.</p>
                 </div>
                 <div class="why-card">
                     <div class="why-card-icon">
-                        <i class="fas fa-lock"></i>
+                        <img src="assets/images/why-card-icon-4.svg" alt="Why Card Icon 4">
                     </div>
                     <h3 class="why-card-title">We bring more authenticity to dating.</h3>
                     <p class="why-card-desc">We believe that dating is only fun with genuine profiles. That's why you'll only find verified profiles on our site, and you can only be contacted by singles who have completed at least 50% of their profile.</p>
                 </div>
                 <div class="why-card">
                     <div class="why-card-icon">
-                        <i class="fas fa-search"></i>
+                        <img src="assets/images/why-card-icon-5.svg" alt="Why Card Icon 5">
                     </div>
                     <h3 class="why-card-title">We bring more authenticity to dating.</h3>
                     <p class="why-card-desc">We believe that dating is only fun with genuine profiles. That's why you'll only find verified profiles on our site, and you can only be contacted by singles who have completed at least 50% of their profile.</p>
@@ -286,9 +378,9 @@
                 <div class="community-section">
                     <h3>Join Community</h3>
                     <div class="community-social">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                        <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                        <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
                     </div>
                 </div>
             </div>
@@ -299,12 +391,22 @@
                     </div>
                     <p class="footer-desc">You find us, finally and you are already in love. More than 5.000.000 around the world already shared the same experience.</p>
                     <div class="payment-methods">
-                        <span class="payment-method">PayPal</span>
-                        <span class="payment-method">Visa</span>
-                        <span class="payment-method">Mastercard</span>
-                        <span class="payment-method">American Express</span>
-                        <span class="payment-method">Discover</span>
-                        <span class="payment-method">Secured by GeoTrust</span>
+                        <div class="payment-method">
+                            <i class="fab fa-paypal"></i>
+                            <span>PayPal</span>
+                        </div>
+                        <div class="payment-method">
+                            <i class="fab fa-cc-visa"></i>
+                            <span>Visa</span>
+                        </div>
+                        <div class="payment-method">
+                            <i class="fab fa-cc-mastercard"></i>
+                            <span>Mastercard</span>
+                        </div>
+                        <div class="payment-method">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Sofort</span>
+                        </div>
                     </div>
                 </div>
                 <div class="footer-column">

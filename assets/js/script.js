@@ -3,17 +3,50 @@ $(document).ready(function() {
 
     // ===== LOADING ANIMATION =====
     function initLoadingAnimation() {
-        const loading = $('<div class="loading"><div class="loading-spinner"></div></div>');
-        $('body').prepend(loading);
+        const loaderHTML = `
+            <div class="loading" id="pageLoader">
+                <div class="loader-card">
+                    <div class="loader-logo"></div>
+                    <div class="loading-text">Finding Your Perfect Match</div>
+                    <div class="loading-subtitle">Loading amazing possibilities...</div>
+                    <div class="heart-container">
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                    </div>
+                    <div class="dots-container">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+            </div>
+        `;
         
-        $(window).on('load', function() {
-            setTimeout(function() {
-                loading.addClass('hidden');
-                setTimeout(function() {
-                    loading.remove();
+        $('body').prepend(loaderHTML);
+        
+        // Simulate loading progress
+        let progress = 0;
+        const progressBar = $('#progressBar');
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(progressInterval);
+                
+                // Hide loader after completion
+                setTimeout(() => {
+                    $('#pageLoader').addClass('hidden');
+                    setTimeout(() => {
+                        $('#pageLoader').remove();
+                    }, 800);
                 }, 500);
-            }, 1000);
-        });
+            }
+            progressBar.css('width', progress + '%');
+        }, 200);
     }
 
     // ===== SCROLL ANIMATIONS =====
@@ -71,7 +104,7 @@ $(document).ready(function() {
             const scrollTop = $(window).scrollTop();
             const header = $('.main-header');
             
-            if (scrollTop > 100) {
+            if (scrollTop > 41) {
                 header.addClass('scrolled');
             } else {
                 header.removeClass('scrolled');
@@ -81,9 +114,17 @@ $(document).ready(function() {
 
     // ===== OFFCANVAS MOBILE MENU =====
     function initOffcanvasMenu() {
+        let offCanvasOverlay = $('.offcanvas-overlay');
+        
+        // Debug: Check if elements exist
+        console.log('Mobile menu button:', $('.mobile-menu-btn').length);
+        console.log('Offcanvas overlay:', offCanvasOverlay.length);
+        console.log('Offcanvas menu:', $('.offcanvas-menu').length);
+        
         // Open offcanvas menu
         $('.mobile-menu-btn').click(function() {
-            $('.offcanvas-overlay').addClass('active');
+            console.log('Mobile menu button clicked');
+            offCanvasOverlay.addClass('active');
             $('.offcanvas-menu').addClass('active');
             $('body').css('overflow', 'hidden');
             
@@ -93,7 +134,8 @@ $(document).ready(function() {
 
         // Close offcanvas menu
         function closeOffcanvasMenu() {
-            $('.offcanvas-overlay').removeClass('active');
+            console.log('Closing mobile menu');
+            offCanvasOverlay.removeClass('active');
             $('.offcanvas-menu').removeClass('active');
             $('body').css('overflow', '');
             $('.mobile-menu-btn').html('<i class="fas fa-bars"></i>');
@@ -216,7 +258,7 @@ $(document).ready(function() {
             }
         });
 
-        // Radio button selection with animation
+        // Radio button selection with animation and form navigation
         $('.radio-option').click(function() {
             const $radio = $(this).find('input[type="radio"]');
             $radio.prop('checked', true);
@@ -226,7 +268,173 @@ $(document).ready(function() {
             setTimeout(() => {
                 $(this).removeClass('animate-pulse');
             }, 500);
+
+            // Check if "I'm new here" is selected
+            if ($radio.attr('id') === 'new' && $radio.attr('name') === 'dating-experience') {
+                // Transition to step 2
+                setTimeout(() => {
+                    showStep2();
+                }, 300);
+            }
+            // Check if "Once or twice" is selected
+            else if ($radio.attr('id') === 'once' && $radio.attr('name') === 'dating-experience') {
+                setTimeout(() => {
+                    showStep2();
+                }, 300);
+            }
+            // Check if "I am an online dating pro" is selected
+            else if ($radio.attr('id') === 'pro' && $radio.attr('name') === 'dating-experience') {
+                setTimeout(() => {
+                    showStep2();
+                }, 300);
+            }
+            // Check if "Nice contacts" is selected
+            else if ($radio.attr('id') === 'contacts' && $radio.attr('name') === 'looking-for') {
+                setTimeout(() => {
+                    showStep3();
+                }, 300);
+            }
+            // Check if "A serious relationship" is selected
+            else if ($radio.attr('id') === 'relationship' && $radio.attr('name') === 'looking-for') {
+                setTimeout(() => {
+                    showStep3();
+                }, 300);
+            }
+            // Check if "I'm not sure yet" is selected
+            else if ($radio.attr('id') === 'unsure' && $radio.attr('name' === 'looking-for')) {
+                setTimeout(() => {
+                    showStep3();
+                }, 300);
+            }
+            // Check if "A Man" is selected from step 3
+            else if ($radio.attr('id') === 'man' && $radio.attr('name') === 'preference') {
+                setTimeout(() => {
+                    showStep4();
+                }, 300);
+            }
         });
+
+        // Back button functionality
+        $('#backToStep1').click(function() {
+            showStep1();
+        });
+
+        $('#backToStep2').click(function() {
+            showStep2();
+        });
+
+        $('#backToStep3').click(function() {
+            showStep3();
+        });
+    }
+
+    // ===== FORM STEP NAVIGATION =====
+    function showStep2() {
+        const $step1 = $('#step1');
+        const $step2 = $('#step2');
+        const $step3 = $('#step3');
+        const $step4 = $('#step4');
+        
+        // Hide all other steps
+        $step1.addClass('fade-out');
+        $step3.addClass('fade-out');
+        $step4.addClass('fade-out');
+        
+        setTimeout(() => {
+            $step1.hide();
+            $step3.hide();
+            $step4.hide();
+            $step2.show().addClass('fade-in');
+            
+            // Remove fade classes after animation
+            setTimeout(() => {
+                $step1.removeClass('fade-out');
+                $step3.removeClass('fade-out');
+                $step4.removeClass('fade-out');
+                $step2.removeClass('fade-in');
+            }, 400);
+        }, 200);
+    }
+
+    function showStep1() {
+        const $step1 = $('#step1');
+        const $step2 = $('#step2');
+        const $step3 = $('#step3');
+        const $step4 = $('#step4');
+        
+        // Hide all other steps
+        $step2.addClass('fade-out');
+        $step3.addClass('fade-out');
+        $step4.addClass('fade-out');
+        
+        setTimeout(() => {
+            $step2.hide();
+            $step3.hide();
+            $step4.hide();
+            $step1.show().addClass('fade-in');
+            
+            // Remove fade classes after animation
+            setTimeout(() => {
+                $step2.removeClass('fade-out');
+                $step3.removeClass('fade-out');
+                $step4.removeClass('fade-out');
+                $step1.removeClass('fade-in');
+            }, 400);
+        }, 200);
+    }
+
+    function showStep3() {
+        const $step1 = $('#step1');
+        const $step2 = $('#step2');
+        const $step3 = $('#step3');
+        const $step4 = $('#step4');
+        
+        // Hide all other steps
+        $step1.addClass('fade-out');
+        $step2.addClass('fade-out');
+        $step4.addClass('fade-out');
+        
+        setTimeout(() => {
+            $step1.hide();
+            $step2.hide();
+            $step4.hide();
+            $step3.show().addClass('fade-in');
+            
+            // Remove fade classes after animation
+            setTimeout(() => {
+                $step1.removeClass('fade-out');
+                $step2.removeClass('fade-out');
+                $step4.removeClass('fade-out');
+                $step3.removeClass('fade-in');
+            }, 400);
+        }, 200);
+    }
+
+    function showStep4() {
+        const $step1 = $('#step1');
+        const $step2 = $('#step2');
+        const $step3 = $('#step3');
+        const $step4 = $('#step4');
+        
+        // Hide all other steps
+        $step1.addClass('fade-out');
+        $step2.addClass('fade-out');
+        $step3.addClass('fade-out');
+        
+        setTimeout(() => {
+            $step1.hide();
+            $step2.hide();
+            $step3.hide();
+            $step4.show().addClass('fade-in');
+            
+            // Remove fade classes after animation
+            setTimeout(() => {
+                $step1.removeClass('fade-out');
+                $step2.removeClass('fade-out');
+                $step3.removeClass('fade-out');
+                $step4.removeClass('fade-in');
+            }, 400);
+        }, 200);
     }
 
     // ===== BUTTON INTERACTIONS =====
@@ -257,15 +465,7 @@ $(document).ready(function() {
     // ===== HOVER EFFECTS =====
     function initHoverEffects() {
         // Feature blocks hover effect
-        $('.feature-block, .why-card, .power-item').hover(
-            function() {
-                $(this).addClass('animate-float');
-            },
-            function() {
-                $(this).removeClass('animate-float');
-            }
-        );
-
+        
         // Social icons hover effect
         $('.social-icons a, .community-social a').hover(
             function() {
@@ -278,18 +478,7 @@ $(document).ready(function() {
     }
 
     // ===== PARALLAX EFFECT =====
-    function initParallaxEffect() {
-        $(window).scroll(function() {
-            const scrolled = $(window).scrollTop();
-            const parallaxElements = $('.hero, .mission-image');
-            
-            parallaxElements.each(function() {
-                const speed = 0.5;
-                const yPos = -(scrolled * speed);
-                $(this).css('transform', `translateY(${yPos}px)`);
-            });
-        });
-    }
+
 
     // ===== TYPING ANIMATION =====
     function initTypingAnimation() {
@@ -428,7 +617,6 @@ $(document).ready(function() {
         initFormInteractions();
         initButtonInteractions();
         initHoverEffects();
-        initParallaxEffect();
         initTypingAnimation();
         initCounterAnimation();
         initResponsiveHandling();
