@@ -90,6 +90,29 @@
     box-sizing: border-box;
 }
 
+
+
+/* ===== SECTION SPACING IMPROVEMENTS ===== */
+.features,
+.mission,
+.why-section,
+.super-powers {
+    position: relative;
+}
+
+.features::before,
+.mission::before,
+.why-section::before,
+.super-powers::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 107, 157, 0.1), transparent);
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -809,7 +832,7 @@ h6 {
 }
 
 .form-group input {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
     border: 1px solid var(--white-transparent-medium);
     border-radius: var(--radius-md);
     background: rgba(255, 107, 157, 0.1);
@@ -830,7 +853,7 @@ h6 {
 }
 
 .signup-btn {
-    padding: var(--spacing-lg) var(--spacing-xl);
+    padding: var(--spacing-md) var(--spacing-xl);
     border: none;
     border-radius: var(--radius-md);
     font-size: var(--font-md);
@@ -1003,6 +1026,7 @@ h6 {
     padding: var(--spacing-colossal) 0;
     background: var(--gradient-light);
     position: relative;
+    margin-top: var(--spacing-lg);
 }
 
 .features::before {
@@ -1112,6 +1136,7 @@ h6 {
     padding: var(--spacing-titanic) 0;
     background: var(--gradient-light);
     position: relative;
+    margin-top: var(--spacing-lg);
 }
 
 .mission-content {
@@ -1203,6 +1228,7 @@ h6 {
     padding: var(--spacing-titanic) 0;
     background: var(--gradient-pink-bg);
     position: relative;
+    margin-top: var(--spacing-lg);
 }
 
 .why-content {
@@ -1301,6 +1327,7 @@ h6 {
     padding: var(--spacing-titanic) 0;
     background: var(--gradient-light);
     position: relative;
+    margin-top: var(--spacing-lg);
 }
 
 .super-powers-content {
@@ -1376,6 +1403,12 @@ h6 {
     transition: all var(--transition-fast);
     position: relative;
     z-index: 2;
+}
+
+.power-icon img {
+    border-radius: 100%;
+    width: 100px;
+    height: 100px;
 }
 
 .power-item:hover .power-icon {

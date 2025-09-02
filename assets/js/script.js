@@ -269,47 +269,22 @@ $(document).ready(function() {
                 $(this).removeClass('animate-pulse');
             }, 500);
 
-            // Check if "I'm new here" is selected
-            if ($radio.attr('id') === 'new' && $radio.attr('name') === 'dating-experience') {
-                // Transition to step 2
-                setTimeout(() => {
-                    showStep2();
-                }, 300);
+            const selectedId = $radio.attr('id');
+            const selectedName = $radio.attr('name');
+
+            let nextStepFn = null;
+
+            if (selectedName === 'dating-experience' && (selectedId === 'new' || selectedId === 'once' || selectedId === 'pro')) {
+                nextStepFn = showStep2;
+            } else if (selectedName === 'looking-for' && (selectedId === 'contacts' || selectedId === 'relationship' || selectedId === 'unsure')) {
+                nextStepFn = showStep3;
+            } else if (selectedName === 'preference' && (selectedId === 'man' || selectedId === 'woman' || selectedId === 'non-binary')) {
+                nextStepFn = showStep4;
             }
-            // Check if "Once or twice" is selected
-            else if ($radio.attr('id') === 'once' && $radio.attr('name') === 'dating-experience') {
+
+            if (typeof nextStepFn === 'function') {
                 setTimeout(() => {
-                    showStep2();
-                }, 300);
-            }
-            // Check if "I am an online dating pro" is selected
-            else if ($radio.attr('id') === 'pro' && $radio.attr('name') === 'dating-experience') {
-                setTimeout(() => {
-                    showStep2();
-                }, 300);
-            }
-            // Check if "Nice contacts" is selected
-            else if ($radio.attr('id') === 'contacts' && $radio.attr('name') === 'looking-for') {
-                setTimeout(() => {
-                    showStep3();
-                }, 300);
-            }
-            // Check if "A serious relationship" is selected
-            else if ($radio.attr('id') === 'relationship' && $radio.attr('name') === 'looking-for') {
-                setTimeout(() => {
-                    showStep3();
-                }, 300);
-            }
-            // Check if "I'm not sure yet" is selected
-            else if ($radio.attr('id') === 'unsure' && $radio.attr('name' === 'looking-for')) {
-                setTimeout(() => {
-                    showStep3();
-                }, 300);
-            }
-            // Check if "A Man" is selected from step 3
-            else if ($radio.attr('id') === 'man' && $radio.attr('name') === 'preference') {
-                setTimeout(() => {
-                    showStep4();
+                    nextStepFn();
                 }, 300);
             }
         });
