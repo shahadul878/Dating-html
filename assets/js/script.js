@@ -165,15 +165,16 @@ $(document).ready(function() {
 
         // Handle offcanvas login button
         $('.offcanvas-login-btn').click(function(e) {
-            e.preventDefault();
-            closeOffcanvasMenu();
-            showNotification('Login form will open here!', 'info');
-            
-            // Add click animation
-            $(this).addClass('animate-bounce');
-            setTimeout(() => {
-                $(this).removeClass('animate-bounce');
-            }, 1000);
+            if (!$(this).attr('href')) {
+                e.preventDefault();
+                showNotification('Login form will open here!', 'info');
+
+                // Add click animation
+                $(this).addClass('animate-bounce');
+                setTimeout(() => {
+                    $(this).removeClass('animate-bounce');
+                }, 1000);
+            }
         });
 
         // Handle offcanvas register button
@@ -217,22 +218,30 @@ $(document).ready(function() {
 
     // ===== SMOOTH SCROLLING =====
     function initSmoothScrolling() {
-        $('a[href^="#"]').click(function(e) {
-            e.preventDefault();
-            const target = $(this.getAttribute('href'));
+        $('a[href^="#"]').each(function() {
+            const $link = $(this);
+            const href = $link.attr('href');
             
-            if (target.length) {
-                const offsetTop = target.offset().top - 80;
-                
-                $('html, body').stop().animate({
-                    scrollTop: offsetTop
-                }, 1000, 'easeInOutQuart');
-                
-                // Close offcanvas menu after clicking
-                $('.offcanvas-overlay').removeClass('active');
-                $('.offcanvas-menu').removeClass('active');
-                $('body').css('overflow', '');
-                $('.mobile-menu-btn').html('<i class="fas fa-bars"></i>');
+            // Only process valid anchor links
+            if (href && href.length > 1) {
+                $link.click(function(e) {
+                    e.preventDefault();
+                    const target = $(href);
+                    
+                    if (target.length) {
+                        const offsetTop = target.offset().top - 80;
+                        
+                        $('html, body').stop().animate({
+                            scrollTop: offsetTop
+                        }, 1000, 'easeInOutQuart');
+                        
+                        // Close offcanvas menu after clicking
+                        $('.offcanvas-overlay').removeClass('active');
+                        $('.offcanvas-menu').removeClass('active');
+                        $('body').css('overflow', '');
+                        $('.mobile-menu-btn').html('<i class="fas fa-bars"></i>');
+                    }
+                });
             }
         });
     }
@@ -425,16 +434,97 @@ $(document).ready(function() {
             }, 1000);
         });
 
-        // Login button
-        $('.login-btn').click(function() {
-            showNotification('Login form will open here!', 'info');
-            
-            // Add click animation
-            $(this).addClass('animate-bounce');
-            setTimeout(() => {
-                $(this).removeClass('animate-bounce');
-            }, 1000);
+        // Login button - only show notification if it's not a link
+        $('.login-btn').click(function(e) {
+            // If it's not a link, show notification
+            if (!$(this).attr('href')) {
+                e.preventDefault();
+                showNotification('Login form will open here!', 'info');
+                
+                // Add click animation
+                $(this).addClass('animate-bounce');
+                setTimeout(() => {
+                    $(this).removeClass('animate-bounce');
+                }, 1000);
+            }
         });
+    }
+
+    // ===== LOGIN FORM FUNCTIONALITY =====
+    function initLoginForm() {
+        try {
+            // Password toggle functionality
+            $('.password-toggle').click(function() {
+                const $passwordInput = $(this).siblings('input');
+                const $icon = $(this).find('i');
+                
+                if ($passwordInput.attr('type') === 'password') {
+                    $passwordInput.attr('type', 'text');
+                    $icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    $passwordInput.attr('type', 'password');
+                    $icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+
+            // Login form submission
+            $('.login-form').submit(function(e) {
+                e.preventDefault();
+                const email = $('#email').val();
+                const password = $('#password').val();
+                
+                if (email && password) {
+                    showNotification('Login form submitted successfully!', 'success');
+                    console.log('Login form submitted:', { email, password });
+                    // Add your login logic here
+                } else {
+                    showNotification('Please fill in all required fields.', 'error');
+                }
+            });
+
+            // Forgot password functionality
+            $('.recover-password').click(function(e) {
+                e.preventDefault();
+                $('.login-form-wrapper').hide();
+                $('.signup-prompt').hide();
+                $('#forgotPasswordForm').show();
+            });
+
+            // Back to login functionality
+            $('#backToLogin').click(function(e) {
+                e.preventDefault();
+                $('#forgotPasswordForm').hide();
+                $('.login-form-wrapper').show();
+                $('.signup-prompt').show();
+            });
+
+            // Forgot password form submission
+            $('.forgot-password-form-content').submit(function(e) {
+                e.preventDefault();
+                const email = $('#reset-email').val();
+                
+                if (email && isValidEmail(email)) {
+                    showNotification('Password reset link sent to ' + email, 'success');
+                    console.log('Password reset requested for:', email);
+                    // Add your password reset logic here
+                } else {
+                    showNotification('Please enter a valid email address.', 'error');
+                }
+            });
+
+            // Social login buttons
+            $('.google-btn').click(function() {
+                showNotification('Google login clicked', 'info');
+                console.log('Google login clicked');
+            });
+
+            $('.facebook-btn').click(function() {
+                showNotification('Facebook login clicked', 'info');
+                console.log('Facebook login clicked');
+            });
+        } catch (error) {
+            console.error('Error initializing login form:', error);
+        }
     }
 
     // ===== HOVER EFFECTS =====
@@ -584,16 +674,51 @@ $(document).ready(function() {
 
     // ===== INITIALIZATION =====
     function init() {
-        initLoadingAnimation();
-        initScrollAnimations();
-        initHeaderScrollEffect();
-        initOffcanvasMenu();
-        initSmoothScrolling();
-        initFormInteractions();
-        initButtonInteractions();
-        initHoverEffects();
-        initTypingAnimation();
-        initCounterAnimation();
+        // Only initialize features if elements exist
+        if ($('#pageLoader').length) {
+            initLoadingAnimation();
+        }
+        
+        if ($('.features-grid, .why-grid, .powers-grid, .mission-content, .hero-form').length) {
+            initScrollAnimations();
+        }
+        
+        if ($('.main-header').length) {
+            initHeaderScrollEffect();
+        }
+        
+        if ($('.mobile-menu-btn').length) {
+            initOffcanvasMenu();
+        }
+        
+        if ($('a[href^="#"]').length) {
+            initSmoothScrolling();
+        }
+        
+        if ($('.newsletter-form, .radio-option').length) {
+            initFormInteractions();
+        }
+        
+        if ($('.cta-btn, .login-btn').length) {
+            initButtonInteractions();
+        }
+        
+        if ($('.login-form, .forgot-password-form').length) {
+            initLoginForm();
+        }
+        
+        if ($('.social-icons, .community-social').length) {
+            initHoverEffects();
+        }
+        
+        if ($('.why-title, .super-powers-title, .mission-text h2').length) {
+            initTypingAnimation();
+        }
+        
+        if ($('.counter').length) {
+            initCounterAnimation();
+        }
+        
         initResponsiveHandling();
         initParticleEffect();
         

@@ -421,6 +421,9 @@ h6 {
     transition: all var(--transition-fast);
     position: relative;
     overflow: hidden;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .login-btn::before {
@@ -1680,6 +1683,10 @@ h6 {
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
+
+    .top-bar{
+        display: none;
+    }
 
     .top-bar-content {
         flex-direction: column;
