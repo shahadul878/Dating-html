@@ -1042,10 +1042,9 @@ h6 {
 
 /* ===== FEATURE BLOCKS ===== */
 .features {
-    padding: var(--spacing-massive) 0 25px;
+    padding: 0 0 25px;
     background: var(--gradient-light);
     position: relative;
-    margin-top: var(--spacing-lg);
 }
 
 .features::before {
@@ -1060,11 +1059,11 @@ h6 {
 }
 
 .features-grid {
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
     display: flex;
-    gap: var(--spacing-xxl);
-    padding: 0 var(--spacing-lg);
+    gap:0;
+    padding: 0;
     position: relative;
     z-index: 1;
 }
@@ -1073,7 +1072,7 @@ h6 {
     background: var(--white-transparent);
     backdrop-filter: blur(10px);
     padding: var(--spacing-huge) var(--spacing-xxl);
-    border-radius: var(--radius-xl);
+    border-radius: 0;
     text-align: center;
     box-shadow: var(--shadow-medium);
     transition: all var(--transition-medium);
@@ -1284,7 +1283,7 @@ h6 {
     background: var(--white-transparent);
     backdrop-filter: blur(10px);
     padding: var(--spacing-xxxl) var(--spacing-xl);
-    border-radius: var(--radius-xl);
+    border-radius: 0;
     box-shadow: var(--shadow-medium);
     transition: all var(--transition-medium);
     border: 1px solid var(--white-transparent-medium);
@@ -1771,7 +1770,7 @@ h6 {
     }
 
     .features{
-        padding: var(--spacing-xxl) 0;
+        padding: 0 0;
     }
 
     .mission{
@@ -1800,7 +1799,7 @@ h6 {
 @media (max-width: 480px) {
 
     .features{
-        padding: var(--spacing-huge) 0 var(--spacing-lg) 0;
+        padding: 0 0 var(--spacing-lg) 0;
     }
 
     .mission{
