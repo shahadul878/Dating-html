@@ -1488,11 +1488,17 @@ h6 {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.newsletter-section h3 {
-    margin-bottom: var(--spacing-lg);
+.newsletter-section, .community-section {
+    display: flex;
+    align-items: center;
+}
+
+.newsletter-section h3{
     color: var(--white);
     font-size: var(--font-xxxl);
     font-weight: 700;
+    flex: 50%;
+    margin: 0;
 }
 
 .newsletter-form {
@@ -1554,7 +1560,7 @@ h6 {
 }
 
 .community-section h3 {
-    margin-bottom: var(--spacing-lg);
+    margin: 0;
     color: var(--white);
     font-size: var(--font-xxxl);
     font-weight: 700;
@@ -1563,7 +1569,7 @@ h6 {
 .community-social {
     display: flex;
     gap: var(--spacing-xl);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .community-social a {
@@ -1793,6 +1799,16 @@ h6 {
     .super-powers-title,
     .mission-text h2 {
         font-size: var(--font-giant);
+    }
+
+    .newsletter-section, .community-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-lg);
+    }
+    .newsletter-section h3, .community-section h3 {
+        flex: auto;
     }
 }
 
