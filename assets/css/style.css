@@ -1491,11 +1491,12 @@ h6 {
 .newsletter-section, .community-section {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .newsletter-section h3{
     color: var(--white);
-    font-size: var(--font-xxxl);
+    font-size: var(--font-md);
     font-weight: 700;
     flex: 50%;
     margin: 0;
@@ -1562,7 +1563,7 @@ h6 {
 .community-section h3 {
     margin: 0;
     color: var(--white);
-    font-size: var(--font-xxxl);
+    font-size: var(--font-md);
     font-weight: 700;
 }
 
@@ -1574,7 +1575,7 @@ h6 {
 
 .community-social a {
     color: var(--white);
-    font-size: var(--font-lg);
+    font-size: var(--font-md);
     transition: all var(--transition-fast);
     display: flex;
     align-items: center;
@@ -1583,7 +1584,7 @@ h6 {
 }
 
 .community-social a i {
-    font-size: var(--font-xxl);
+    font-size: var(--font-lg);
 }
 
 .community-social a:hover {
