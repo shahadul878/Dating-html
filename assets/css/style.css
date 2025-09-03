@@ -824,6 +824,18 @@ h6 {
     flex-direction: row;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-xl);
+    .radio-option{
+        background: 0;
+    }
+    .radio-option:hover {
+        background: 0;
+        border-color: transparent;
+        transform: translateX(0);
+        color: var(--text-dark);
+        label{
+            color: var(--text-dark);
+        }
+    }
 }
 
 /* ===== SIGNUP FORM STYLES ===== */
