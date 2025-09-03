@@ -1810,7 +1810,16 @@ h6 {
     }
     .newsletter-section h3, .community-section h3 {
         flex: auto;
+        font-size: var(--font-xxxl);
     }
+    .community-social a {
+        font-size: var(--font-lg);
+    }
+
+    .community-social a i {
+        font-size: var(--font-xxl);
+    }
+
 }
 
 @media (max-width: 480px) {
