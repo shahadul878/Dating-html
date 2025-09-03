@@ -675,9 +675,7 @@ $(document).ready(function() {
     // ===== INITIALIZATION =====
     function init() {
         // Only initialize features if elements exist
-        if ($('#pageLoader').length) {
-            initLoadingAnimation();
-        }
+        initLoadingAnimation();
         
         if ($('.features-grid, .why-grid, .powers-grid, .mission-content, .hero-form').length) {
             initScrollAnimations();
