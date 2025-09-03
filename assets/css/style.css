@@ -1549,6 +1549,7 @@ h6 {
 .community-social {
     display: flex;
     gap: var(--spacing-xl);
+    flex-wrap: wrap;
 }
 
 .community-social a {
@@ -1737,6 +1738,7 @@ h6 {
     .mission-content {
         grid-template-columns: 1fr;
         gap: var(--spacing-massive);
+        text-align: center;
     }
 
     .footer-top {
@@ -1809,6 +1811,7 @@ h6 {
     .cta-btn {
         padding: var(--spacing-md) var(--spacing-xl);
         font-size: var(--font-md);
+        width: 100%;
     }
 
     .newsletter-input,
