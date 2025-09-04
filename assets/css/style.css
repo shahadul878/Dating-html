@@ -1154,7 +1154,6 @@ h6 {
     padding: 25px 0;
     background: var(--gradient-light);
     position: relative;
-    margin-top: var(--spacing-lg);
 }
 
 .mission-content {
@@ -1395,15 +1394,7 @@ h6 {
     z-index: 1;
 }
 
-.power-item:hover::before {
-    opacity: 1;
-}
-
-.power-item:hover {
-    transform: translateY(-10px) scale(1.02);
-    border-color: var(--primary-light);
-    box-shadow: 0 20px 50px rgba(255, 107, 157, 0.2);
-}
+/* Hover effects removed for design stability */
 
 .power-icon {
     font-size: 50px;
@@ -1420,10 +1411,7 @@ h6 {
     height: 100px;
 }
 
-.power-item:hover .power-icon {
-    color: var(--white);
-    animation: bounce 1s ease;
-}
+/* Hover effects removed for design stability */
 
 .power-title {
     color: var(--heading-color);
@@ -1435,9 +1423,7 @@ h6 {
     transition: all var(--transition-fast);
 }
 
-.power-item:hover .power-title {
-    color: var(--white);
-}
+/* Hover effects removed for design stability */
 
 .power-desc {
     color: var(--text-light);
@@ -1447,9 +1433,7 @@ h6 {
     transition: all var(--transition-fast);
 }
 
-.power-item:hover .power-desc {
-    color: rgba(255,255,255,0.9);
-}
+/* Hover effects removed for design stability */
 
 /* ===== FOOTER ===== */
 .footer {
@@ -1699,8 +1683,58 @@ h6 {
     background: #fff;
 }
 
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
+    /* Prevent horizontal scrolling on mobile */
+    html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+    
+    * {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Disable animations and hover effects on mobile for better performance */
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    /* Disable hover effects on mobile */
+    .feature-block:hover,
+    .why-card:hover,
+    .power-item:hover,
+    .social-icons a:hover,
+    .community-social a:hover {
+        transform: none !important;
+        box-shadow: none !important;
+        background: none !important;
+        color: inherit !important;
+    }
+    
+    /* Ensure all containers respect viewport width */
+    .container, .nav-content, .hero-content, .mission-content, 
+    .why-content, .super-powers-content, .footer-content {
+        max-width: 100vw;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+    
+    /* Fix any potential overflow from images */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Ensure form elements don't overflow */
+    input, textarea, select, button {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
 
     .top-bar{
         display: none;
@@ -1720,6 +1754,8 @@ h6 {
     .nav-content {
         flex-wrap: wrap;
         padding: var(--spacing-sm) var(--spacing-lg);
+        max-width: 100%;
+        overflow: hidden;
     }
 
     .nav-menu {
@@ -1729,6 +1765,13 @@ h6 {
     .offcanvas-overlay,
     .offcanvas-menu {
         display: block;
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+    
+    .offcanvas-menu {
+        width: 100%;
+        max-width: 300px;
     }
 
     .mobile-menu-btn {
@@ -1758,6 +1801,9 @@ h6 {
         margin-top: var(--spacing-huge);
         margin-left: auto;
         margin-right: auto;
+        max-width: 100%;
+        padding: 0 var(--spacing-md);
+        box-sizing: border-box;
     }
 
     .mission-content {
@@ -1807,6 +1853,20 @@ h6 {
         flex-direction: column;
         align-items: flex-start;
         gap: var(--spacing-lg);
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    .newsletter-form {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .newsletter-input {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     .newsletter-section h3, .community-section h3 {
         flex: auto;
@@ -1823,6 +1883,24 @@ h6 {
 }
 
 @media (max-width: 480px) {
+    /* Additional mobile fixes for smaller screens */
+    html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+    
+    .container, .nav-content, .hero-content, .mission-content, .footer-content {
+        padding-left: var(--spacing-sm);
+        padding-right: var(--spacing-sm);
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Ensure all text and elements fit within viewport */
+    h1, h2, h3, h4, h5, h6 {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
 
     .features{
         padding: 0 0 var(--spacing-lg) 0;

@@ -3,6 +3,17 @@ $(document).ready(function() {
 
     // ===== LOADING ANIMATION =====
     function initLoadingAnimation() {
+        // Check if user has already seen the loading screen
+        const hasSeenLoading = localStorage.getItem('jensj_loading_seen');
+        
+        if (hasSeenLoading) {
+            // User has already seen the loading screen, skip it
+            return;
+        }
+        
+        // Mark that user has seen the loading screen
+        localStorage.setItem('jensj_loading_seen', 'true');
+        
         const loaderHTML = `
             <div class="loading" id="pageLoader">
                 <div class="loader-card">
@@ -249,21 +260,36 @@ $(document).ready(function() {
     // ===== FORM INTERACTIONS =====
     function initFormInteractions() {
         // Newsletter form
-        $('.newsletter-form').submit(function(e) {
+        $('#newsletter-form').submit(function(e) {
             e.preventDefault();
-            const email = $('.newsletter-input').val();
+            const email = $('#newsletter-email').val();
+            const timestamp = new Date().toISOString();
+            
+            // Set timestamp
+            $('#newsletter-timestamp').val(timestamp);
+            
+            // Clear previous messages
+            clearNewsletterMessages();
             
             if (email && isValidEmail(email)) {
-                showNotification('Thank you for subscribing to our newsletter!', 'success');
-                $('.newsletter-input').val('');
+                // Prepare data for backend integration
+                const newsletterData = {
+                    email: email,
+                    source: 'website',
+                    timestamp: timestamp,
+                    userAgent: navigator.userAgent,
+                    referrer: document.referrer,
+                    url: window.location.href
+                };
                 
-                // Add success animation
-                $(this).addClass('animate-pulse');
-                setTimeout(() => {
-                    $(this).removeClass('animate-pulse');
-                }, 1000);
+                // Show loading state
+                showNewsletterLoading();
+                
+                // Simulate API call (replace with actual integration)
+                submitNewsletterData(newsletterData);
+                
             } else {
-                showNotification('Please enter a valid email address.', 'error');
+                showNewsletterError('Please enter a valid email address.');
             }
         });
 
@@ -309,6 +335,21 @@ $(document).ready(function() {
 
         $('#backToStep3').click(function() {
             showStep3();
+        });
+
+        // Signup form validation
+        $('#signup-submit').click(function(e) {
+            e.preventDefault();
+            validateSignupForm();
+        });
+
+        // Real-time validation
+        $('#signup-email').on('blur', function() {
+            validateEmail($(this).val());
+        });
+
+        $('#signup-password').on('blur', function() {
+            validatePassword($(this).val());
         });
     }
 
@@ -425,7 +466,16 @@ $(document).ready(function() {
     function initButtonInteractions() {
         // CTA button
         $('.cta-btn').click(function() {
-            showNotification('Registration form will open here!', 'info');
+            // Scroll to the hero section where the signup form is
+            $('html, body').stop().animate({
+                scrollTop: $('#home').offset().top - 80
+            }, 1000, 'easeInOutQuart');
+            
+            // Show the signup form (step 4) after scrolling
+            setTimeout(() => {
+                showStep4();
+                showNotification('Please complete the registration form below!', 'info');
+            }, 1000);
             
             // Add click animation
             $(this).addClass('animate-bounce');
@@ -642,6 +692,206 @@ $(document).ready(function() {
         return emailRegex.test(email);
     }
 
+    // ===== SIGNUP FORM VALIDATION =====
+    function validateSignupForm() {
+        const email = $('#signup-email').val();
+        const password = $('#signup-password').val();
+        let isValid = true;
+
+        // Clear previous errors
+        clearSignupErrors();
+
+        // Validate email
+        if (!email) {
+            showSignupError('email-error', 'Email address is required');
+            isValid = false;
+        } else if (!isValidEmail(email)) {
+            showSignupError('email-error', 'Please enter a valid email address');
+            isValid = false;
+        }
+
+        // Validate password
+        if (!password) {
+            showSignupError('password-error', 'Password is required');
+            isValid = false;
+        } else if (password.length < 6) {
+            showSignupError('password-error', 'Password must be at least 6 characters long');
+            isValid = false;
+        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+            showSignupError('password-error', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+            isValid = false;
+        }
+
+        if (isValid) {
+            showNotification('Registration successful! Welcome to our community!', 'success');
+            // Here you would typically submit the form to your backend
+            console.log('Signup data:', { email, password });
+        }
+
+        return isValid;
+    }
+
+    function validateEmail(email) {
+        if (!email) {
+            showSignupError('email-error', 'Email address is required');
+            return false;
+        } else if (!isValidEmail(email)) {
+            showSignupError('email-error', 'Please enter a valid email address');
+            return false;
+        } else {
+            clearSignupError('email-error');
+            return true;
+        }
+    }
+
+    function validatePassword(password) {
+        if (!password) {
+            showSignupError('password-error', 'Password is required');
+            return false;
+        } else if (password.length < 6) {
+            showSignupError('password-error', 'Password must be at least 6 characters long');
+            return false;
+        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+            showSignupError('password-error', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+            return false;
+        } else {
+            clearSignupError('password-error');
+            return true;
+        }
+    }
+
+    function showSignupError(errorId, message) {
+        $('#' + errorId).text(message).addClass('show');
+        $('#' + errorId).closest('.form-group').addClass('error');
+    }
+
+    function clearSignupError(errorId) {
+        $('#' + errorId).text('').removeClass('show');
+        $('#' + errorId).closest('.form-group').removeClass('error');
+    }
+
+    function clearSignupErrors() {
+        $('.error-message').text('').removeClass('show');
+        $('.form-group').removeClass('error');
+    }
+
+    // ===== NEWSLETTER INTEGRATION =====
+    function submitNewsletterData(data) {
+        // This is where you would integrate with your backend or newsletter service
+        // Examples of popular integrations:
+        
+        // 1. Mailchimp Integration
+        // submitToMailchimp(data);
+        
+        // 2. SendGrid Integration
+        // submitToSendGrid(data);
+        
+        // 3. Custom Backend API
+        // submitToCustomAPI(data);
+        
+        // 4. Google Analytics Event
+        // gtag('event', 'newsletter_signup', {
+        //     'event_category': 'engagement',
+        //     'event_label': data.email
+        // });
+        
+        // For now, simulate a successful submission
+        setTimeout(() => {
+            showNewsletterSuccess('Thank you for subscribing to our newsletter!');
+            $('#newsletter-email').val('');
+            hideNewsletterLoading();
+            
+            // Log the data for debugging (remove in production)
+            console.log('Newsletter signup data:', data);
+        }, 1500);
+    }
+
+    function submitToMailchimp(data) {
+        // Example Mailchimp integration
+        // Replace with your actual Mailchimp endpoint and API key
+        /*
+        $.ajax({
+            url: 'https://your-domain.us1.list-manage.com/subscribe/post-json?u=YOUR_USER_ID&id=YOUR_LIST_ID',
+            method: 'POST',
+            data: {
+                'EMAIL': data.email,
+                'SOURCE': data.source,
+                'TIMESTAMP': data.timestamp
+            },
+            success: function(response) {
+                showNewsletterSuccess('Thank you for subscribing!');
+                $('#newsletter-email').val('');
+            },
+            error: function() {
+                showNewsletterError('Something went wrong. Please try again.');
+            }
+        });
+        */
+    }
+
+    function submitToCustomAPI(data) {
+        // Example custom API integration
+        /*
+        $.ajax({
+            url: '/api/newsletter/subscribe',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                showNewsletterSuccess('Thank you for subscribing!');
+                $('#newsletter-email').val('');
+            },
+            error: function() {
+                showNewsletterError('Something went wrong. Please try again.');
+            }
+        });
+        */
+    }
+
+    function showNewsletterLoading() {
+        $('.newsletter-btn').text('Subscribing...').prop('disabled', true);
+    }
+
+    function hideNewsletterLoading() {
+        $('.newsletter-btn').text('Submit').prop('disabled', false);
+    }
+
+    function showNewsletterSuccess(message) {
+        $('#newsletter-success').text(message).addClass('show');
+        setTimeout(() => {
+            $('#newsletter-success').removeClass('show');
+        }, 5000);
+    }
+
+    function showNewsletterError(message) {
+        $('#newsletter-error').text(message).addClass('show');
+        setTimeout(() => {
+            $('#newsletter-error').removeClass('show');
+        }, 5000);
+    }
+
+    function clearNewsletterMessages() {
+        $('#newsletter-error').text('').removeClass('show');
+        $('#newsletter-success').text('').removeClass('show');
+    }
+
+    // ===== LOADING SCREEN UTILITIES =====
+    // Function to reset loading screen (useful for testing)
+    function resetLoadingScreen() {
+        localStorage.removeItem('jensj_loading_seen');
+        console.log('Loading screen reset. It will show on next page load.');
+    }
+
+    // Function to force show loading screen (useful for testing)
+    function forceShowLoadingScreen() {
+        localStorage.removeItem('jensj_loading_seen');
+        initLoadingAnimation();
+    }
+
+    // Make functions available globally for testing (remove in production)
+    window.resetLoadingScreen = resetLoadingScreen;
+    window.forceShowLoadingScreen = forceShowLoadingScreen;
+
     // ===== RESPONSIVE HANDLING =====
     function initResponsiveHandling() {
         $(window).resize(function() {
@@ -672,12 +922,40 @@ $(document).ready(function() {
         }
     }
 
+    // ===== MOBILE DETECTION AND OPTIMIZATION =====
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+               window.innerWidth <= 768;
+    }
+
+    function optimizeForMobile() {
+        if (isMobileDevice()) {
+            // Disable animations on mobile
+            $('*').css({
+                'animation-duration': '0.01ms',
+                'animation-iteration-count': '1',
+                'transition-duration': '0.01ms'
+            });
+            
+            // Remove hover effects
+            $('.feature-block, .why-card, .power-item, .social-icons a, .community-social a').off('mouseenter mouseleave');
+            
+            // Disable particle effects on mobile for better performance
+            $('.particle-container').remove();
+            
+            console.log('Mobile optimizations applied');
+        }
+    }
+
     // ===== INITIALIZATION =====
     function init() {
+        // Apply mobile optimizations first
+        optimizeForMobile();
+        
         // Only initialize features if elements exist
         initLoadingAnimation();
         
-        if ($('.features-grid, .why-grid, .powers-grid, .mission-content, .hero-form').length) {
+        if ($('.features-grid, .why-grid, .powers-grid, .mission-content, .hero-form').length && !isMobileDevice()) {
             initScrollAnimations();
         }
         
@@ -718,7 +996,11 @@ $(document).ready(function() {
         }
         
         initResponsiveHandling();
-        initParticleEffect();
+        
+        // Only initialize particle effect on desktop
+        if (!isMobileDevice()) {
+            initParticleEffect();
+        }
         
         // Add CSS for notifications and particles
         addCustomCSS();
@@ -806,6 +1088,57 @@ $(document).ready(function() {
                     transform: translateY(-100px) rotate(360deg);
                     opacity: 0;
                 }
+            }
+
+            /* Signup Form Error Styles */
+            .error-message {
+                color: #dc3545;
+                font-size: 12px;
+                margin-top: 5px;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                min-height: 16px;
+            }
+
+            .error-message.show {
+                opacity: 1;
+            }
+
+            .form-group.error input {
+                border-color: #dc3545;
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+            }
+
+            .form-group.error input:focus {
+                border-color: #dc3545;
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+            }
+
+            /* Newsletter Form Styles */
+            .newsletter-error, .newsletter-success {
+                margin-top: 10px;
+                padding: 8px 12px;
+                border-radius: 4px;
+                font-size: 14px;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                min-height: 20px;
+            }
+
+            .newsletter-error {
+                background-color: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
+
+            .newsletter-success {
+                background-color: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
+
+            .newsletter-error.show, .newsletter-success.show {
+                opacity: 1;
             }
         `;
         
