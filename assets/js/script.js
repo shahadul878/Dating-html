@@ -3,110 +3,14 @@ $(document).ready(function() {
 
     // ===== LOADING ANIMATION =====
     function initLoadingAnimation() {
-        // Check if user has already seen the loading screen
-        const hasSeenLoading = localStorage.getItem('jensj_loading_seen');
-        
-        if (hasSeenLoading) {
-            // User has already seen the loading screen, skip it
-            return;
-        }
-        
-        // Mark that user has seen the loading screen
-        localStorage.setItem('jensj_loading_seen', 'true');
-        
-        const loaderHTML = `
-            <div class="loading" id="pageLoader">
-                <div class="loader-card">
-                    <div class="loader-logo"></div>
-                    <div class="loading-text">Finding Your Perfect Match</div>
-                    <div class="loading-subtitle">Loading amazing possibilities...</div>
-                    <div class="heart-container">
-                        <div class="heart"></div>
-                        <div class="heart"></div>
-                        <div class="heart"></div>
-                    </div>
-                    <div class="dots-container">
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-bar" id="progressBar"></div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        $('body').prepend(loaderHTML);
-        
-        // Simulate loading progress
-        let progress = 0;
-        const progressBar = $('#progressBar');
-        const progressInterval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(progressInterval);
-                
-                // Hide loader after completion
-                setTimeout(() => {
-                    $('#pageLoader').addClass('hidden');
-                    setTimeout(() => {
-                        $('#pageLoader').remove();
-                    }, 800);
-                }, 500);
-            }
-            progressBar.css('width', progress + '%');
-        }, 200);
+        // Loading animation disabled for better performance
+        return;
     }
 
     // ===== SCROLL ANIMATIONS =====
     function initScrollAnimations() {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                    
-                    // Add staggered animation for grid items
-                    if (entry.target.classList.contains('features-grid')) {
-                        $(entry.target).find('.feature-block').each(function(index) {
-                            const $this = $(this);
-                            setTimeout(function() {
-                                $this.addClass('animate-fade-in-up');
-                            }, index * 200);
-                        });
-                    }
-                    
-                    if (entry.target.classList.contains('why-grid')) {
-                        $(entry.target).find('.why-card').each(function(index) {
-                            const $this = $(this);
-                            setTimeout(function() {
-                                $this.addClass('animate-fade-in-up');
-                            }, index * 150);
-                        });
-                    }
-                    
-                    if (entry.target.classList.contains('powers-grid')) {
-                        $(entry.target).find('.power-item').each(function(index) {
-                            const $this = $(this);
-                            setTimeout(function() {
-                                $this.addClass('animate-fade-in-up');
-                            }, index * 200);
-                        });
-                    }
-                }
-            });
-        }, observerOptions);
-
-        // Observe elements for scroll animations
-        $('.features-grid, .why-grid, .powers-grid, .mission-content, .hero-form').each(function() {
-            observer.observe(this);
-        });
+        // Scroll animations disabled for better performance
+        return;
     }
 
     // ===== HEADER SCROLL EFFECT =====
@@ -607,17 +511,8 @@ $(document).ready(function() {
 
     // ===== HOVER EFFECTS =====
     function initHoverEffects() {
-        // Feature blocks hover effect
-        
-        // Social icons hover effect
-        $('.social-icons a, .community-social a').hover(
-            function() {
-                $(this).addClass('animate-bounce');
-            },
-            function() {
-                $(this).removeClass('animate-bounce');
-            }
-        );
+        // Hover effects disabled for better performance
+        return;
     }
 
     // ===== PARALLAX EFFECT =====
@@ -625,57 +520,14 @@ $(document).ready(function() {
 
     // ===== TYPING ANIMATION =====
     function initTypingAnimation() {
-        const titles = $('.why-title, .super-powers-title, .mission-text h2');
-        
-        titles.each(function() {
-            const $this = $(this);
-            const text = $this.text();
-            $this.text('');
-            
-            let i = 0;
-            const typeWriter = function() {
-                if (i < text.length) {
-                    $this.text($this.text() + text.charAt(i));
-                    i++;
-                    setTimeout(typeWriter, 50);
-                }
-            };
-            
-            // Start typing animation when element is visible
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        typeWriter();
-                        observer.unobserve(entry.target);
-                    }
-                });
-            });
-            
-            observer.observe(this);
-        });
+        // Typing animation disabled for better performance
+        return;
     }
 
     // ===== COUNTER ANIMATION =====
     function initCounterAnimation() {
-        const counters = $('.counter');
-        
-        counters.each(function() {
-            const $this = $(this);
-            const countTo = $this.attr('data-count');
-            
-            $({ countNum: $this.text() }).animate({
-                countNum: countTo
-            }, {
-                duration: 2000,
-                easing: 'swing',
-                step: function() {
-                    $this.text(Math.floor(this.countNum));
-                },
-                complete: function() {
-                    $this.text(this.countNum);
-                }
-            });
-        });
+        // Counter animation disabled for better performance
+        return;
     }
 
     // ===== NOTIFICATION SYSTEM =====
@@ -1116,19 +968,8 @@ $(document).ready(function() {
 
     // ===== PARTICLE EFFECT =====
     function initParticleEffect() {
-        const particleContainer = $('<div class="particle-container"></div>');
-        $('body').append(particleContainer);
-        
-        for (let i = 0; i < 50; i++) {
-            const particle = $('<div class="particle"></div>');
-            particle.css({
-                left: Math.random() * 100 + '%',
-                top: Math.random() * 100 + '%',
-                animationDelay: Math.random() * 20 + 's',
-                animationDuration: (Math.random() * 10 + 10) + 's'
-            });
-            particleContainer.append(particle);
-        }
+        // Particle effect disabled for better performance
+        return;
     }
 
     // ===== MOBILE DETECTION AND OPTIMIZATION =====
@@ -1138,22 +979,20 @@ $(document).ready(function() {
     }
 
     function optimizeForMobile() {
-        if (isMobileDevice()) {
-            // Disable animations on mobile
-            $('*').css({
-                'animation-duration': '0.01ms',
-                'animation-iteration-count': '1',
-                'transition-duration': '0.01ms'
-            });
-            
-            // Remove hover effects
-            $('.feature-block, .why-card, .power-item, .social-icons a, .community-social a').off('mouseenter mouseleave');
-            
-            // Disable particle effects on mobile for better performance
-            $('.particle-container').remove();
-            
-            console.log('Mobile optimizations applied');
-        }
+        // Disable all animations globally for better performance
+        $('*').css({
+            'animation-duration': '0.01ms',
+            'animation-iteration-count': '1',
+            'transition-duration': '0.01ms'
+        });
+        
+        // Remove hover effects
+        $('.feature-block, .why-card, .power-item, .social-icons a, .community-social a').off('mouseenter mouseleave');
+        
+        // Disable particle effects for better performance
+        $('.particle-container').remove();
+        
+        console.log('All animations disabled for better performance');
     }
 
     // ===== INITIALIZATION =====
@@ -1164,9 +1003,8 @@ $(document).ready(function() {
         // Only initialize features if elements exist
         initLoadingAnimation();
         
-        if ($('.features-grid, .why-grid, .powers-grid, .mission-content, .hero-form').length && !isMobileDevice()) {
-            initScrollAnimations();
-        }
+        // Scroll animations disabled
+        // initScrollAnimations();
         
         if ($('.main-header').length) {
             initHeaderScrollEffect();
@@ -1192,17 +1030,14 @@ $(document).ready(function() {
             initLoginForm();
         }
         
-        if ($('.social-icons, .community-social').length) {
-            initHoverEffects();
-        }
+        // Hover effects disabled
+        // initHoverEffects();
         
-        if ($('.why-title, .super-powers-title, .mission-text h2').length) {
-            initTypingAnimation();
-        }
+        // Typing animation disabled
+        // initTypingAnimation();
         
-        if ($('.counter').length) {
-            initCounterAnimation();
-        }
+        // Counter animation disabled
+        // initCounterAnimation();
         
         // Initialize login page signup functionality if on login page
         if ($('.signup-prompt a').length) {
@@ -1211,10 +1046,8 @@ $(document).ready(function() {
         
         initResponsiveHandling();
         
-        // Only initialize particle effect on desktop
-        if (!isMobileDevice()) {
-            initParticleEffect();
-        }
+        // Particle effect disabled
+        // initParticleEffect();
         
         // Add CSS for notifications and particles
         addCustomCSS();
