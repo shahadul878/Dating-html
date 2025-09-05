@@ -192,7 +192,28 @@ $(document).ready(function() {
         $('.offcanvas-register-btn').click(function(e) {
             e.preventDefault();
             closeOffcanvasMenu();
-            showNotification('Registration form will open here!', 'info');
+            
+            // Check if we're on the login page
+            if (window.location.pathname.includes('login.html')) {
+                // On login page, show the signup form
+                setTimeout(() => {
+                    showSignupForm();
+                    showNotification('Please complete the registration form below!', 'info');
+                }, 300);
+            } else {
+                // On main page, scroll to the signup form in hero section
+                setTimeout(() => {
+                    $('html, body').stop().animate({
+                        scrollTop: $('#home').offset().top - 80
+                    }, 1000, 'easeInOutQuart');
+                    
+                    // Show the signup form (step 4) after scrolling
+                    setTimeout(() => {
+                        showStep4();
+                        showNotification('Please complete the registration form below!', 'info');
+                    }, 1000);
+                }, 300);
+            }
             
             // Add click animation
             $(this).addClass('animate-bounce');
@@ -461,6 +482,9 @@ $(document).ready(function() {
             }, 400);
         }, 200);
     }
+
+    // Make showStep4 available globally for mobile menu
+    window.showStep4 = showStep4;
 
     // ===== BUTTON INTERACTIONS =====
     function initButtonInteractions() {
@@ -892,6 +916,257 @@ $(document).ready(function() {
     window.resetLoadingScreen = resetLoadingScreen;
     window.forceShowLoadingScreen = forceShowLoadingScreen;
 
+    // ===== LOGIN PAGE SIGNUP FUNCTIONALITY =====
+    function initLoginPageSignup() {
+        // Show signup form when "Sign up!" link is clicked
+        $('.signup-prompt a').click(function(e) {
+            e.preventDefault();
+            showSignupForm();
+        });
+
+        // Back to login from signup
+        $('#backToLoginFromSignup').click(function(e) {
+            e.preventDefault();
+            showLoginForm();
+        });
+
+        // Signup form validation
+        $('#signupFormContent').submit(function(e) {
+            e.preventDefault();
+            validateLoginPageSignupForm();
+        });
+
+        // Real-time validation for signup form
+        $('#signup-firstname').on('blur', function() {
+            validateSignupField('firstname', $(this).val());
+        });
+
+        $('#signup-lastname').on('blur', function() {
+            validateSignupField('lastname', $(this).val());
+        });
+
+        $('#signup-email').on('blur', function() {
+            validateSignupField('email', $(this).val());
+        });
+
+        $('#signup-password').on('blur', function() {
+            validateSignupField('password', $(this).val());
+        });
+
+        $('#signup-confirm-password').on('blur', function() {
+            validateSignupField('confirm-password', $(this).val());
+        });
+    }
+
+    function showSignupForm() {
+        $('.login-form-wrapper').hide();
+        $('.signup-prompt').hide();
+        $('#forgotPasswordForm').hide();
+        $('#signupForm').show();
+    }
+
+    // Make showSignupForm available globally for mobile menu
+    window.showSignupForm = showSignupForm;
+
+    function showLoginForm() {
+        $('#signupForm').hide();
+        $('#forgotPasswordForm').hide();
+        $('.login-form-wrapper').show();
+        $('.signup-prompt').show();
+    }
+
+    function validateLoginPageSignupForm() {
+        const firstname = $('#signup-firstname').val();
+        const lastname = $('#signup-lastname').val();
+        const email = $('#signup-email').val();
+        const password = $('#signup-password').val();
+        const confirmPassword = $('#signup-confirm-password').val();
+        const terms = $('#terms').is(':checked');
+        
+        let isValid = true;
+
+        // Clear previous errors
+        clearLoginPageSignupErrors();
+
+        // Validate first name
+        if (!firstname.trim()) {
+            showLoginPageSignupError('firstname-error', 'First name is required');
+            isValid = false;
+        } else if (firstname.trim().length < 2) {
+            showLoginPageSignupError('firstname-error', 'First name must be at least 2 characters');
+            isValid = false;
+        }
+
+        // Validate last name
+        if (!lastname.trim()) {
+            showLoginPageSignupError('lastname-error', 'Last name is required');
+            isValid = false;
+        } else if (lastname.trim().length < 2) {
+            showLoginPageSignupError('lastname-error', 'Last name must be at least 2 characters');
+            isValid = false;
+        }
+
+        // Validate email
+        if (!email) {
+            showLoginPageSignupError('signup-email-error', 'Email address is required');
+            isValid = false;
+        } else if (!isValidEmail(email)) {
+            showLoginPageSignupError('signup-email-error', 'Please enter a valid email address');
+            isValid = false;
+        }
+
+        // Validate password
+        if (!password) {
+            showLoginPageSignupError('signup-password-error', 'Password is required');
+            isValid = false;
+        } else if (password.length < 6) {
+            showLoginPageSignupError('signup-password-error', 'Password must be at least 6 characters long');
+            isValid = false;
+        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+            showLoginPageSignupError('signup-password-error', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+            isValid = false;
+        }
+
+        // Validate confirm password
+        if (!confirmPassword) {
+            showLoginPageSignupError('confirm-password-error', 'Please confirm your password');
+            isValid = false;
+        } else if (password !== confirmPassword) {
+            showLoginPageSignupError('confirm-password-error', 'Passwords do not match');
+            isValid = false;
+        }
+
+        // Validate terms
+        if (!terms) {
+            showNotification('Please accept the Terms & Conditions to continue', 'error');
+            isValid = false;
+        }
+
+        if (isValid) {
+            showNotification('Account created successfully! Welcome to our community!', 'success');
+            // Here you would typically submit the form to your backend
+            console.log('Signup data:', { firstname, lastname, email, password });
+            
+            // Clear form and go back to login
+            setTimeout(() => {
+                $('#signupFormContent')[0].reset();
+                showLoginForm();
+            }, 2000);
+        }
+
+        return isValid;
+    }
+
+    function validateSignupField(fieldType, value) {
+        switch (fieldType) {
+            case 'firstname':
+                if (!value.trim()) {
+                    showLoginPageSignupError('firstname-error', 'First name is required');
+                    return false;
+                } else if (value.trim().length < 2) {
+                    showLoginPageSignupError('firstname-error', 'First name must be at least 2 characters');
+                    return false;
+                } else {
+                    clearLoginPageSignupError('firstname-error');
+                    return true;
+                }
+                
+            case 'lastname':
+                if (!value.trim()) {
+                    showLoginPageSignupError('lastname-error', 'Last name is required');
+                    return false;
+                } else if (value.trim().length < 2) {
+                    showLoginPageSignupError('lastname-error', 'Last name must be at least 2 characters');
+                    return false;
+                } else {
+                    clearLoginPageSignupError('lastname-error');
+                    return true;
+                }
+                
+            case 'email':
+                if (!value) {
+                    showLoginPageSignupError('signup-email-error', 'Email address is required');
+                    return false;
+                } else if (!isValidEmail(value)) {
+                    showLoginPageSignupError('signup-email-error', 'Please enter a valid email address');
+                    return false;
+                } else {
+                    clearLoginPageSignupError('signup-email-error');
+                    return true;
+                }
+                
+            case 'password':
+                if (!value) {
+                    showLoginPageSignupError('signup-password-error', 'Password is required');
+                    return false;
+                } else if (value.length < 6) {
+                    showLoginPageSignupError('signup-password-error', 'Password must be at least 6 characters long');
+                    return false;
+                } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
+                    showLoginPageSignupError('signup-password-error', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+                    return false;
+                } else {
+                    clearLoginPageSignupError('signup-password-error');
+                    return true;
+                }
+                
+            case 'confirm-password':
+                const password = $('#signup-password').val();
+                if (!value) {
+                    showLoginPageSignupError('confirm-password-error', 'Please confirm your password');
+                    return false;
+                } else if (password !== value) {
+                    showLoginPageSignupError('confirm-password-error', 'Passwords do not match');
+                    return false;
+                } else {
+                    clearLoginPageSignupError('confirm-password-error');
+                    return true;
+                }
+        }
+    }
+
+    function showLoginPageSignupError(errorId, message) {
+        $('#' + errorId).text(message).addClass('show');
+        $('#' + errorId).closest('.form-group').addClass('error');
+    }
+
+    function clearLoginPageSignupError(errorId) {
+        $('#' + errorId).text('').removeClass('show');
+        $('#' + errorId).closest('.form-group').removeClass('error');
+    }
+
+    function clearLoginPageSignupErrors() {
+        $('.error-message').text('').removeClass('show');
+        $('.form-group').removeClass('error');
+    }
+
+    // Password toggle functions for signup form
+    window.toggleSignupPassword = function() {
+        const passwordInput = $('#signup-password');
+        const icon = $('.password-toggle i').first();
+        
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            passwordInput.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    };
+
+    window.toggleSignupConfirmPassword = function() {
+        const passwordInput = $('#signup-confirm-password');
+        const icon = $('.password-toggle i').last();
+        
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            passwordInput.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    };
+
     // ===== RESPONSIVE HANDLING =====
     function initResponsiveHandling() {
         $(window).resize(function() {
@@ -993,6 +1268,11 @@ $(document).ready(function() {
         
         if ($('.counter').length) {
             initCounterAnimation();
+        }
+        
+        // Initialize login page signup functionality if on login page
+        if ($('.signup-prompt a').length) {
+            initLoginPageSignup();
         }
         
         initResponsiveHandling();
