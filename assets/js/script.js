@@ -993,6 +993,31 @@ $(document).ready(function() {
             validateSignupField('confirm-password', $(this).val());
         });
 
+        // Password toggle event delegation
+        $(document).on('click', '.password-toggle', function() {
+            const passwordInput = $(this).siblings('input[type="password"], input[type="text"]');
+            const icon = $(this).find('i');
+            
+            console.log('Password toggle clicked');
+            console.log('Input found:', passwordInput.length);
+            console.log('Icon found:', icon.length);
+            
+            if (passwordInput.length === 0 || icon.length === 0) {
+                console.error('Input or icon not found');
+                return;
+            }
+            
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                console.log('Password shown');
+            } else {
+                passwordInput.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                console.log('Password hidden');
+            }
+        });
+
         
         // Also add click handlers for radio options as backup
         $(document).on('click', '.radio-option', function() {
@@ -1208,14 +1233,32 @@ $(document).ready(function() {
     // Password toggle functions for signup form
     window.toggleSignupPassword = function() {
         const passwordInput = $('#signup-password');
-        const icon = $('.password-toggle i').first();
+        const icon = passwordInput.siblings('.password-toggle').find('i');
+        
+        console.log('toggleSignupPassword called');
+        console.log('Password input found:', passwordInput.length);
+        console.log('Icon found:', icon.length);
+        console.log('Current type:', passwordInput.attr('type'));
+        console.log('Step 5 visible:', $('#signup-step5').is(':visible'));
+        
+        if (passwordInput.length === 0) {
+            console.error('Password input not found');
+            return;
+        }
+        
+        if (icon.length === 0) {
+            console.error('Icon not found');
+            return;
+        }
         
         if (passwordInput.attr('type') === 'password') {
             passwordInput.attr('type', 'text');
             icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            console.log('Password shown');
         } else {
             passwordInput.attr('type', 'password');
             icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            console.log('Password hidden');
         }
     };
 
@@ -1229,6 +1272,63 @@ $(document).ready(function() {
         } else {
             confirmPasswordInput.attr('type', 'password');
             icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    };
+
+    // Password toggle functions for hero form
+    window.toggleHeroPassword = function() {
+        const passwordInput = $('#hero-password');
+        const icon = passwordInput.siblings('.password-toggle').find('i');
+        
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            passwordInput.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    };
+
+    window.toggleHeroConfirmPassword = function() {
+        const confirmPasswordInput = $('#hero-confirm-password');
+        const icon = confirmPasswordInput.siblings('.password-toggle').find('i');
+        
+        if (confirmPasswordInput.attr('type') === 'password') {
+            confirmPasswordInput.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            confirmPasswordInput.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    };
+
+    // Password toggle function for login form
+    window.togglePassword = function() {
+        const passwordInput = $('#password');
+        const icon = passwordInput.siblings('.password-toggle').find('i');
+        
+        console.log('togglePassword called');
+        console.log('Password input found:', passwordInput.length);
+        console.log('Icon found:', icon.length);
+        
+        if (passwordInput.length === 0) {
+            console.error('Login password input not found');
+            return;
+        }
+        
+        if (icon.length === 0) {
+            console.error('Login password icon not found');
+            return;
+        }
+        
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            console.log('Login password shown');
+        } else {
+            passwordInput.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            console.log('Login password hidden');
         }
     };
 

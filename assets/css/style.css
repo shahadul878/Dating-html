@@ -91,6 +91,153 @@
     box-sizing: border-box;
 }
 
+/* ===== PASSWORD FIELD STYLING ===== */
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    width: 100%;
+    padding-right: 50px; /* Space for toggle button */
+    padding: var(--spacing-md);
+    border: 1px solid var(--white-transparent-medium);
+    border-radius: var(--radius-md);
+    background: rgba(255, 107, 157, 0.1);
+    color: var(--text-dark);
+    font-size: var(--font-md);
+    transition: all var(--transition-fast);
+}
+
+.password-field input::placeholder {
+    color: var(--text-lighter);
+}
+
+.password-field input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: rgba(255, 107, 157, 0.15);
+    box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--radius-xs);
+    transition: var(--transition-fast);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.password-toggle:hover {
+    color: var(--primary-color);
+    background: rgba(255, 107, 157, 0.1);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.password-toggle:focus {
+    outline: none;
+    color: var(--primary-color);
+    background: rgba(255, 107, 157, 0.15);
+    box-shadow: 0 0 0 2px rgba(255, 107, 157, 0.2);
+}
+
+.password-toggle:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.password-toggle i {
+    font-size: var(--font-md);
+    transition: var(--transition-fast);
+}
+
+/* Enhanced form group styling for password fields */
+.form-group .password-field {
+    margin-bottom: 0;
+}
+
+.form-group .password-field + .error-message {
+    margin-top: var(--spacing-sm);
+}
+
+/* ===== CHECKBOX/TOGGLE STYLING ===== */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.remember-me input[type="checkbox"] {
+    display: none;
+}
+
+.remember-me label {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    background-color: #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.remember-me label::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.remember-me input[type="checkbox"]:checked + label {
+    background-color: var(--primary-color);
+}
+
+.remember-me input[type="checkbox"]:checked + label::before {
+    transform: translateX(26px);
+}
+
+.remember-me span {
+    color: var(--text-dark);
+    font-size: var(--font-sm);
+    line-height: 1.4;
+}
+
+.remember-me span a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.remember-me span a:hover {
+    text-decoration: underline;
+}
+
 
 
 /* ===== SECTION SPACING IMPROVEMENTS ===== */
@@ -1695,6 +1842,22 @@ h6 {
     * {
         max-width: 100%;
         box-sizing: border-box;
+    }
+
+    /* Mobile password toggle styling */
+    .password-toggle {
+        width: 36px;
+        height: 36px;
+        right: 12px;
+        padding: 10px;
+    }
+
+    .password-toggle i {
+        font-size: var(--font-lg);
+    }
+
+    .password-field input {
+        padding-right: 55px; /* More space for larger mobile toggle */
     }
     
     /* Disable animations and hover effects on mobile for better performance */

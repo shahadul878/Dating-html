@@ -250,17 +250,30 @@
                             <div class="error-message" id="hero-email-error"></div>
                         </div>
                         <div class="form-group">
-                            <input type="password" id="hero-password" name="password" placeholder="Password" required>
+                            <div class="password-field">
+                                <input type="password" id="hero-password" name="password" placeholder="Password" required>
+                                <button type="button" class="password-toggle" onclick="toggleHeroPassword()">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
                             <div class="error-message" id="hero-password-error"></div>
                         </div>
                         <div class="form-group">
-                            <input type="password" id="hero-confirm-password" name="confirm-password" placeholder="Confirm password" required>
+                            <div class="password-field">
+                                <input type="password" id="hero-confirm-password" name="confirm-password" placeholder="Confirm password" required>
+                                <button type="button" class="password-toggle" onclick="toggleHeroConfirmPassword()">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
                             <div class="error-message" id="hero-confirm-password-error"></div>
                         </div>
                         <div class="form-group">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="hero-terms" name="terms" required>
-                                <label for="hero-terms">I accept the <a href="#" style="color: var(--primary-color);">Terms & Conditions</a> and <a href="#" style="color: var(--primary-color);">User Agreement</a></label>
+                            <div class="form-options">
+                                <div class="remember-me">
+                                    <input type="checkbox" id="hero-terms" name="terms" required>
+                                    <label for="hero-terms"></label>
+                                    <span for="hero-terms">I accept the <a href="#" style="color: var(--primary-color);">Terms & Conditions</a> and <a href="#" style="color: var(--primary-color);">User Agreement</a></span>
+                                </div>
                             </div>
                             <div class="error-message" id="hero-terms-error"></div>
                         </div>
