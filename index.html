@@ -124,6 +124,7 @@
                 <div class="form-header">
                     <h2>Where Love Begins</h2>
                 </div>
+                <!-- Step 1: Have you ever tried online dating? -->
                 <div class="form-content" id="step1">
                     <div class="form-question">
                         <p>Have you ever tried online dating?</p>
@@ -142,6 +143,7 @@
                             <label for="pro">I am an online dating pro</label>
                         </div>
                     </div>
+                    <div class="error-message" id="step1-error"></div>
                 </div>
                 
                 <!-- Step 2: What are you looking for? -->
@@ -151,88 +153,127 @@
                     </div>
                     <div class="radio-group">
                         <div class="radio-option">
-                            <input type="radio" id="contacts" name="looking-for" value="contacts">
-                            <label for="contacts">Nice contacts</label>
+                            <input type="radio" id="relationship" name="looking-for" value="relationship">
+                            <label for="relationship">Relationship</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" id="relationship" name="looking-for" value="relationship">
-                            <label for="relationship">A serious relationship</label>
+                            <input type="radio" id="friendship" name="looking-for" value="friendship">
+                            <label for="friendship">Friendship</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="adventure" name="looking-for" value="adventure">
+                            <label for="adventure">Adventure</label>
                         </div>
                         <div class="radio-option">
                             <input type="radio" id="unsure" name="looking-for" value="unsure">
                             <label for="unsure">I'm not sure yet</label>
                         </div>
                     </div>
-                                         <div class="form-navigation">
-                         <button type="button" class="back-btn" id="backToStep1">
-                             <i class="fas fa-arrow-left"></i> Back
-                         </button>
-                     </div>
-                 </div>
+                    <div class="error-message" id="step2-error"></div>
+                    <div class="form-navigation">
+                        <button type="button" class="back-btn" id="backToStep1">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </div>
+                </div>
                  
-                 <!-- Step 3: I am / I am looking for -->
-                 <div class="form-content" id="step3" style="display: none;">
-                     <div class="form-question">
-                         <p>What are you looking for?</p>
-                     </div>
-                     <div class="radio-group-horizontal">
-                         <div class="radio-option">
-                             <input type="radio" id="iam" name="identity" value="iam" checked>
-                             <label for="iam">I am</label>
-                         </div>
-                         <div class="radio-option">
-                             <input type="radio" id="looking-for" name="identity" value="looking-for">
-                             <label for="looking-for">I am looking for</label>
-                         </div>
-                     </div>
-                     <div class="radio-group">
-                         <div class="radio-option">
-                             <input type="radio" id="woman" name="preference" value="woman">
-                             <label for="woman">A woman</label>
-                         </div>
-                         <div class="radio-option">
-                             <input type="radio" id="man" name="preference" value="man">
-                             <label for="man">A Man</label>
-                         </div>
-                         <div class="radio-option">
-                             <input type="radio" id="non-binary" name="preference" value="non-binary">
-                             <label for="non-binary">non-binary singles</label>
-                         </div>
-                     </div>
-                     <div class="form-navigation">
-                         <button type="button" class="back-btn" id="backToStep2">
-                             <i class="fas fa-arrow-left"></i> Back
-                         </button>
-                     </div>
-                 </div>
+                <!-- Step 3: I am -->
+                <div class="form-content" id="step3" style="display: none;">
+                    <div class="form-question">
+                        <p>I am</p>
+                    </div>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="man" name="identity" value="man">
+                            <label for="man">Man</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="woman" name="identity" value="woman">
+                            <label for="woman">Woman</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="non-binary" name="identity" value="non-binary">
+                            <label for="non-binary">Non-binary</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="step3-error"></div>
+                    <div class="form-navigation">
+                        <button type="button" class="back-btn" id="backToStep2">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </div>
+                </div>
                  
-                 <!-- Step 4: Sign Up Form -->
-                 <div class="form-content" id="step4" style="display: none;">
-                     <div class="form-question">
-                         <h3>Sign Up here</h3>
-                     </div>
-                     <div class="signup-form">
-                         <div class="form-group">
-                             <input type="email" id="signup-email" name="email" placeholder="My email address" required>
-                             <div class="error-message" id="email-error"></div>
-                         </div>
-                         <div class="form-group">
-                             <input type="password" id="signup-password" name="password" placeholder="Create password" required>
-                             <div class="error-message" id="password-error"></div>
-                         </div>
-                         <button type="submit" class="signup-btn primary" id="signup-submit">Register for free</button>
-                         <div class="form-separator">
-                             <span>or</span>
-                         </div>
-                         <button type="button" class="signup-btn google">
-                             <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="google-logo">
-                             Sign Up with Google
-                         </button>
-                         <div class="consent-text">
-                             <p>By clicking the registration button, I consent to the processing of my personal and desired gender information for partner search purposes.</p>
-                         </div>
-                     </div>
-                 </div>
+                <!-- Step 4: What are you looking for? (Partner preferences) -->
+                <div class="form-content" id="step4" style="display: none;">
+                    <div class="form-question">
+                       <p>What are you looking for?</p>
+                    </div>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="looking-man" name="partner-preference" value="man">
+                            <label for="looking-man">Man</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="looking-woman" name="partner-preference" value="woman">
+                            <label for="looking-woman">Woman</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="looking-non-binary" name="partner-preference" value="non-binary">
+                            <label for="looking-non-binary">Non-binary</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="looking-anyone" name="partner-preference" value="anyone">
+                            <label for="looking-anyone">Anyone</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="step4-error"></div>
+                    <div class="form-navigation">
+                        <button type="button" class="back-btn" id="backToStep3">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </div>
+                </div>
+                 
+                <!-- Step 5: Sign Up here -->
+                <div class="form-content" id="step5" style="display: none;">
+                    <div class="form-question">
+                        <p>Sign up here</p>
+                    </div>
+                    <div class="signup-form">
+                        <div class="form-group">
+                            <input type="text" id="hero-nickname" name="nickname" placeholder="Nickname" required>
+                            <div class="error-message" id="hero-nickname-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="hero-email" name="email" placeholder="Email address" required>
+                            <div class="error-message" id="hero-email-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="hero-password" name="password" placeholder="Password" required>
+                            <div class="error-message" id="hero-password-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="hero-confirm-password" name="confirm-password" placeholder="Confirm password" required>
+                            <div class="error-message" id="hero-confirm-password-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="hero-terms" name="terms" required>
+                                <label for="hero-terms">I accept the <a href="#" style="color: var(--primary-color);">Terms & Conditions</a> and <a href="#" style="color: var(--primary-color);">User Agreement</a></label>
+                            </div>
+                            <div class="error-message" id="hero-terms-error"></div>
+                        </div>
+                        <button type="submit" class="signup-btn primary" id="hero-signup-submit">Sign Up</button>
+                        <div class="form-separator">
+                            <span>or</span>
+                        </div>
+                        <button type="button" class="signup-btn google">
+                            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="google-logo">
+                            Sign Up with Google
+                        </button>
+                    </div>
+                </div>
              </div>
          </div>
      </section>

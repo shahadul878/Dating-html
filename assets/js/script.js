@@ -113,9 +113,9 @@ $(document).ready(function() {
                         scrollTop: $('#home').offset().top - 80
                     }, 1000, 'easeInOutQuart');
                     
-                    // Show the signup form (step 4) after scrolling
+                    // Show the signup form (step 5) after scrolling
                     setTimeout(() => {
-                        showStep4();
+                        showStep5();
                         showNotification('Please complete the registration form below!', 'info');
                     }, 1000);
                 }, 300);
@@ -238,10 +238,12 @@ $(document).ready(function() {
 
             if (selectedName === 'dating-experience' && (selectedId === 'new' || selectedId === 'once' || selectedId === 'pro')) {
                 nextStepFn = showStep2;
-            } else if (selectedName === 'looking-for' && (selectedId === 'contacts' || selectedId === 'relationship' || selectedId === 'unsure')) {
+            } else if (selectedName === 'looking-for' && (selectedId === 'relationship' || selectedId === 'friendship' || selectedId === 'adventure' || selectedId === 'unsure')) {
                 nextStepFn = showStep3;
-            } else if (selectedName === 'preference' && (selectedId === 'man' || selectedId === 'woman' || selectedId === 'non-binary')) {
+            } else if (selectedName === 'identity' && (selectedId === 'man' || selectedId === 'woman' || selectedId === 'non-binary')) {
                 nextStepFn = showStep4;
+            } else if (selectedName === 'partner-preference' && (selectedId === 'looking-man' || selectedId === 'looking-woman' || selectedId === 'looking-non-binary' || selectedId === 'looking-anyone')) {
+                nextStepFn = showStep5;
             }
 
             if (typeof nextStepFn === 'function') {
@@ -264,19 +266,33 @@ $(document).ready(function() {
             showStep3();
         });
 
+        $('#backToStep4').click(function() {
+            showStep4();
+        });
+
         // Signup form validation
-        $('#signup-submit').click(function(e) {
+        $('#hero-signup-submit').click(function(e) {
             e.preventDefault();
             validateSignupForm();
         });
 
-        // Real-time validation
-        $('#signup-email').on('blur', function() {
+        // Real-time validation for hero form
+        $('#hero-email').on('blur', function() {
             validateEmail($(this).val());
         });
 
-        $('#signup-password').on('blur', function() {
+        $('#hero-password').on('blur', function() {
             validatePassword($(this).val());
+        });
+
+        $('#hero-confirm-password').on('blur', function() {
+            const password = $('#hero-password').val();
+            const confirmPassword = $(this).val();
+            if (confirmPassword && password !== confirmPassword) {
+                showSignupError('hero-confirm-password-error', 'Passwords do not match');
+            } else {
+                clearSignupError('hero-confirm-password-error');
+            }
         });
     }
 
@@ -286,16 +302,19 @@ $(document).ready(function() {
         const $step2 = $('#step2');
         const $step3 = $('#step3');
         const $step4 = $('#step4');
+        const $step5 = $('#step5');
         
         // Hide all other steps
         $step1.addClass('fade-out');
         $step3.addClass('fade-out');
         $step4.addClass('fade-out');
+        $step5.addClass('fade-out');
         
         setTimeout(() => {
             $step1.hide();
             $step3.hide();
             $step4.hide();
+            $step5.hide();
             $step2.show().addClass('fade-in');
             
             // Remove fade classes after animation
@@ -303,6 +322,7 @@ $(document).ready(function() {
                 $step1.removeClass('fade-out');
                 $step3.removeClass('fade-out');
                 $step4.removeClass('fade-out');
+                $step5.removeClass('fade-out');
                 $step2.removeClass('fade-in');
             }, 400);
         }, 200);
@@ -313,16 +333,19 @@ $(document).ready(function() {
         const $step2 = $('#step2');
         const $step3 = $('#step3');
         const $step4 = $('#step4');
+        const $step5 = $('#step5');
         
         // Hide all other steps
         $step2.addClass('fade-out');
         $step3.addClass('fade-out');
         $step4.addClass('fade-out');
+        $step5.addClass('fade-out');
         
         setTimeout(() => {
             $step2.hide();
             $step3.hide();
             $step4.hide();
+            $step5.hide();
             $step1.show().addClass('fade-in');
             
             // Remove fade classes after animation
@@ -330,6 +353,7 @@ $(document).ready(function() {
                 $step2.removeClass('fade-out');
                 $step3.removeClass('fade-out');
                 $step4.removeClass('fade-out');
+                $step5.removeClass('fade-out');
                 $step1.removeClass('fade-in');
             }, 400);
         }, 200);
@@ -340,16 +364,19 @@ $(document).ready(function() {
         const $step2 = $('#step2');
         const $step3 = $('#step3');
         const $step4 = $('#step4');
+        const $step5 = $('#step5');
         
         // Hide all other steps
         $step1.addClass('fade-out');
         $step2.addClass('fade-out');
         $step4.addClass('fade-out');
+        $step5.addClass('fade-out');
         
         setTimeout(() => {
             $step1.hide();
             $step2.hide();
             $step4.hide();
+            $step5.hide();
             $step3.show().addClass('fade-in');
             
             // Remove fade classes after animation
@@ -357,6 +384,7 @@ $(document).ready(function() {
                 $step1.removeClass('fade-out');
                 $step2.removeClass('fade-out');
                 $step4.removeClass('fade-out');
+                $step5.removeClass('fade-out');
                 $step3.removeClass('fade-in');
             }, 400);
         }, 200);
@@ -367,16 +395,19 @@ $(document).ready(function() {
         const $step2 = $('#step2');
         const $step3 = $('#step3');
         const $step4 = $('#step4');
+        const $step5 = $('#step5');
         
         // Hide all other steps
         $step1.addClass('fade-out');
         $step2.addClass('fade-out');
         $step3.addClass('fade-out');
+        $step5.addClass('fade-out');
         
         setTimeout(() => {
             $step1.hide();
             $step2.hide();
             $step3.hide();
+            $step5.hide();
             $step4.show().addClass('fade-in');
             
             // Remove fade classes after animation
@@ -384,13 +415,45 @@ $(document).ready(function() {
                 $step1.removeClass('fade-out');
                 $step2.removeClass('fade-out');
                 $step3.removeClass('fade-out');
+                $step5.removeClass('fade-out');
                 $step4.removeClass('fade-in');
             }, 400);
         }, 200);
     }
 
-    // Make showStep4 available globally for mobile menu
-    window.showStep4 = showStep4;
+    function showStep5() {
+        const $step1 = $('#step1');
+        const $step2 = $('#step2');
+        const $step3 = $('#step3');
+        const $step4 = $('#step4');
+        const $step5 = $('#step5');
+        
+        // Hide all other steps
+        $step1.addClass('fade-out');
+        $step2.addClass('fade-out');
+        $step3.addClass('fade-out');
+        $step4.addClass('fade-out');
+        
+        setTimeout(() => {
+            $step1.hide();
+            $step2.hide();
+            $step3.hide();
+            $step4.hide();
+            $step5.show().addClass('fade-in');
+            
+            // Remove fade classes after animation
+            setTimeout(() => {
+                $step1.removeClass('fade-out');
+                $step2.removeClass('fade-out');
+                $step3.removeClass('fade-out');
+                $step4.removeClass('fade-out');
+                $step5.removeClass('fade-in');
+            }, 400);
+        }, 200);
+    }
+
+    // Make showStep5 available globally for mobile menu
+    window.showStep5 = showStep5;
 
     // ===== BUTTON INTERACTIONS =====
     function initButtonInteractions() {
@@ -401,9 +464,9 @@ $(document).ready(function() {
                 scrollTop: $('#home').offset().top - 80
             }, 1000, 'easeInOutQuart');
             
-            // Show the signup form (step 4) after scrolling
+            // Show the signup form (step 5) after scrolling
             setTimeout(() => {
-                showStep4();
+                showStep5();
                 showNotification('Please complete the registration form below!', 'info');
             }, 1000);
             
@@ -575,38 +638,86 @@ $(document).ready(function() {
 
     // ===== SIGNUP FORM VALIDATION =====
     function validateSignupForm() {
-        const email = $('#signup-email').val();
-        const password = $('#signup-password').val();
+        // Validate all steps first
         let isValid = true;
-
+        
         // Clear previous errors
         clearSignupErrors();
-
-        // Validate email
-        if (!email) {
-            showSignupError('email-error', 'Email address is required');
-            isValid = false;
-        } else if (!isValidEmail(email)) {
-            showSignupError('email-error', 'Please enter a valid email address');
+        
+        // Validate step 1: Dating experience
+        if (!$('input[name="dating-experience"]:checked').length) {
+            showSignupError('step1-error', 'Please select your dating experience');
             isValid = false;
         }
-
+        
+        // Validate step 2: Looking for
+        if (!$('input[name="looking-for"]:checked').length) {
+            showSignupError('step2-error', 'Please select what you are looking for');
+            isValid = false;
+        }
+        
+        // Validate step 3: Identity
+        if (!$('input[name="identity"]:checked').length) {
+            showSignupError('step3-error', 'Please select your identity');
+            isValid = false;
+        }
+        
+        // Validate step 4: Partner preference
+        if (!$('input[name="partner-preference"]:checked').length) {
+            showSignupError('step4-error', 'Please select your partner preference');
+            isValid = false;
+        }
+        
+        // Validate step 5: Form fields
+        const nickname = $('#hero-nickname').val().trim();
+        const email = $('#hero-email').val().trim();
+        const password = $('#hero-password').val();
+        const confirmPassword = $('#hero-confirm-password').val();
+        const termsAccepted = $('#hero-terms').is(':checked');
+        
+        // Validate nickname
+        if (!nickname || nickname.length < 2) {
+            showSignupError('hero-nickname-error', 'Nickname must be at least 2 characters long');
+            isValid = false;
+        }
+        
+        // Validate email
+        if (!email || !isValidEmail(email)) {
+            showSignupError('hero-email-error', 'Please enter a valid email address');
+            isValid = false;
+        }
+        
         // Validate password
-        if (!password) {
-            showSignupError('password-error', 'Password is required');
+        if (!password || password.length < 8) {
+            showSignupError('hero-password-error', 'Password must be at least 8 characters long');
             isValid = false;
-        } else if (password.length < 6) {
-            showSignupError('password-error', 'Password must be at least 6 characters long');
+        }
+        
+        // Validate confirm password
+        if (!confirmPassword) {
+            showSignupError('hero-confirm-password-error', 'Please confirm your password');
             isValid = false;
-        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-            showSignupError('password-error', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+        } else if (password !== confirmPassword) {
+            showSignupError('hero-confirm-password-error', 'Passwords do not match');
+            isValid = false;
+        }
+        
+        // Validate terms
+        if (!termsAccepted) {
+            showSignupError('hero-terms-error', 'You must accept the Terms & Conditions and User Agreement');
             isValid = false;
         }
 
         if (isValid) {
             showNotification('Registration successful! Welcome to our community!', 'success');
             // Here you would typically submit the form to your backend
-            console.log('Signup data:', { email, password });
+            console.log('Signup data:', { 
+                datingExperience: $('input[name="dating-experience"]:checked').val(),
+                lookingFor: $('input[name="looking-for"]:checked').val(),
+                identity: $('input[name="identity"]:checked').val(),
+                partnerPreference: $('input[name="partner-preference"]:checked').val(),
+                nickname, email, password 
+            });
         }
 
         return isValid;
@@ -614,29 +725,26 @@ $(document).ready(function() {
 
     function validateEmail(email) {
         if (!email) {
-            showSignupError('email-error', 'Email address is required');
+            showSignupError('hero-email-error', 'Email address is required');
             return false;
         } else if (!isValidEmail(email)) {
-            showSignupError('email-error', 'Please enter a valid email address');
+            showSignupError('hero-email-error', 'Please enter a valid email address');
             return false;
         } else {
-            clearSignupError('email-error');
+            clearSignupError('hero-email-error');
             return true;
         }
     }
 
     function validatePassword(password) {
         if (!password) {
-            showSignupError('password-error', 'Password is required');
+            showSignupError('hero-password-error', 'Password is required');
             return false;
-        } else if (password.length < 6) {
-            showSignupError('password-error', 'Password must be at least 6 characters long');
-            return false;
-        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-            showSignupError('password-error', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+        } else if (password.length < 8) {
+            showSignupError('hero-password-error', 'Password must be at least 8 characters long');
             return false;
         } else {
-            clearSignupError('password-error');
+            clearSignupError('hero-password-error');
             return true;
         }
     }
@@ -881,6 +989,10 @@ $(document).ready(function() {
             validateSignupField('password', $(this).val());
         });
 
+        $(document).on('blur', '#signup-confirm-password', function() {
+            validateSignupField('confirm-password', $(this).val());
+        });
+
         
         // Also add click handlers for radio options as backup
         $(document).on('click', '.radio-option', function() {
@@ -960,9 +1072,17 @@ $(document).ready(function() {
         }
         
         // Validate step 5: Form fields
+        const nickname = $('#signup-nickname').val().trim();
         const email = $('#signup-email').val().trim();
         const password = $('#signup-password').val();
+        const confirmPassword = $('#signup-confirm-password').val();
         const termsAccepted = $('#signup-terms').is(':checked');
+        
+        // Validate nickname
+        if (!nickname || nickname.length < 2) {
+            showSignupError('signup-nickname-error', 'Nickname must be at least 2 characters long');
+            isValid = false;
+        }
         
         // Validate email
         if (!email || !isValidEmail(email)) {
@@ -973,6 +1093,15 @@ $(document).ready(function() {
         // Validate password
         if (!password || password.length < 8) {
             showSignupError('signup-password-error', 'Password must be at least 8 characters long');
+            isValid = false;
+        }
+        
+        // Validate confirm password
+        if (!confirmPassword) {
+            showSignupError('signup-confirm-password-error', 'Please confirm your password');
+            isValid = false;
+        } else if (password !== confirmPassword) {
+            showSignupError('signup-confirm-password-error', 'Passwords do not match');
             isValid = false;
         }
         
@@ -1042,6 +1171,19 @@ $(document).ready(function() {
                 }
                 break;
                 
+            case 'confirm-password':
+                const password = $('#signup-password').val();
+                if (!value) {
+                    showSignupError('signup-confirm-password-error', 'Please confirm your password');
+                    return false;
+                } else if (value !== password) {
+                    showSignupError('signup-confirm-password-error', 'Passwords do not match');
+                    return false;
+                } else {
+                    clearSignupError('signup-confirm-password-error');
+                    return true;
+                }
+                break;
                 
             default:
                 return true;
@@ -1073,6 +1215,19 @@ $(document).ready(function() {
             icon.removeClass('fa-eye').addClass('fa-eye-slash');
         } else {
             passwordInput.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    };
+
+    window.toggleSignupConfirmPassword = function() {
+        const confirmPasswordInput = $('#signup-confirm-password');
+        const icon = confirmPasswordInput.siblings('.password-toggle').find('i');
+        
+        if (confirmPasswordInput.attr('type') === 'password') {
+            confirmPasswordInput.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            confirmPasswordInput.attr('type', 'password');
             icon.removeClass('fa-eye-slash').addClass('fa-eye');
         }
     };
