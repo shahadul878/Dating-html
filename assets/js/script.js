@@ -176,7 +176,8 @@ $(document).ready(function() {
 
         // Handle offcanvas login button
         $('.offcanvas-login-btn').click(function(e) {
-            if (!$(this).attr('href')) {
+            const href = $(this).attr('href');
+            if (!href || href === '#' || href === '') {
                 e.preventDefault();
                 showNotification('Login form will open here!', 'info');
 
@@ -186,6 +187,7 @@ $(document).ready(function() {
                     $(this).removeClass('animate-bounce');
                 }, 1000);
             }
+            // If href exists and is not '#', let the default link behavior work
         });
 
         // Handle offcanvas register button
@@ -508,10 +510,11 @@ $(document).ready(function() {
             }, 1000);
         });
 
-        // Login button - only show notification if it's not a link
+        // Login button - only show notification if it's not a proper link
         $('.login-btn').click(function(e) {
-            // If it's not a link, show notification
-            if (!$(this).attr('href')) {
+            const href = $(this).attr('href');
+            // If it's not a proper link, show notification
+            if (!href || href === '#' || href === '') {
                 e.preventDefault();
                 showNotification('Login form will open here!', 'info');
                 
@@ -521,6 +524,7 @@ $(document).ready(function() {
                     $(this).removeClass('animate-bounce');
                 }, 1000);
             }
+            // If href exists and is not '#', let the default link behavior work
         });
     }
 
@@ -712,7 +716,8 @@ $(document).ready(function() {
 
     // ===== UTILITY FUNCTIONS =====
     function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // More robust email validation
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         return emailRegex.test(email);
     }
 
@@ -937,14 +942,6 @@ $(document).ready(function() {
         });
 
         // Real-time validation for signup form
-        $('#signup-firstname').on('blur', function() {
-            validateSignupField('firstname', $(this).val());
-        });
-
-        $('#signup-lastname').on('blur', function() {
-            validateSignupField('lastname', $(this).val());
-        });
-
         $('#signup-email').on('blur', function() {
             validateSignupField('email', $(this).val());
         });
@@ -953,9 +950,6 @@ $(document).ready(function() {
             validateSignupField('password', $(this).val());
         });
 
-        $('#signup-confirm-password').on('blur', function() {
-            validateSignupField('confirm-password', $(this).val());
-        });
     }
 
     function showSignupForm() {
@@ -968,6 +962,13 @@ $(document).ready(function() {
     // Make showSignupForm available globally for mobile menu
     window.showSignupForm = showSignupForm;
 
+    // Debug function to test email validation
+    window.testEmailValidation = function(email) {
+        console.log('Testing email:', email);
+        console.log('isValidEmail result:', isValidEmail(email));
+        return isValidEmail(email);
+    };
+
     function showLoginForm() {
         $('#signupForm').hide();
         $('#forgotPasswordForm').hide();
@@ -976,43 +977,29 @@ $(document).ready(function() {
     }
 
     function validateLoginPageSignupForm() {
-        const firstname = $('#signup-firstname').val();
-        const lastname = $('#signup-lastname').val();
         const email = $('#signup-email').val();
         const password = $('#signup-password').val();
-        const confirmPassword = $('#signup-confirm-password').val();
         const terms = $('#terms').is(':checked');
+        
+        // Debug: console.log('Form values:', { email, password, terms });
         
         let isValid = true;
 
         // Clear previous errors
         clearLoginPageSignupErrors();
 
-        // Validate first name
-        if (!firstname.trim()) {
-            showLoginPageSignupError('firstname-error', 'First name is required');
-            isValid = false;
-        } else if (firstname.trim().length < 2) {
-            showLoginPageSignupError('firstname-error', 'First name must be at least 2 characters');
-            isValid = false;
-        }
-
-        // Validate last name
-        if (!lastname.trim()) {
-            showLoginPageSignupError('lastname-error', 'Last name is required');
-            isValid = false;
-        } else if (lastname.trim().length < 2) {
-            showLoginPageSignupError('lastname-error', 'Last name must be at least 2 characters');
-            isValid = false;
-        }
-
         // Validate email
-        if (!email) {
+        if (!email || email.trim() === '') {
             showLoginPageSignupError('signup-email-error', 'Email address is required');
             isValid = false;
-        } else if (!isValidEmail(email)) {
-            showLoginPageSignupError('signup-email-error', 'Please enter a valid email address');
-            isValid = false;
+        } else {
+            const trimmedEmail = email.trim();
+            if (!isValidEmail(trimmedEmail)) {
+                showLoginPageSignupError('signup-email-error', 'Please enter a valid email address');
+                isValid = false;
+            } else {
+                clearLoginPageSignupError('signup-email-error');
+            }
         }
 
         // Validate password
@@ -1027,15 +1014,6 @@ $(document).ready(function() {
             isValid = false;
         }
 
-        // Validate confirm password
-        if (!confirmPassword) {
-            showLoginPageSignupError('confirm-password-error', 'Please confirm your password');
-            isValid = false;
-        } else if (password !== confirmPassword) {
-            showLoginPageSignupError('confirm-password-error', 'Passwords do not match');
-            isValid = false;
-        }
-
         // Validate terms
         if (!terms) {
             showNotification('Please accept the Terms & Conditions to continue', 'error');
@@ -1045,7 +1023,7 @@ $(document).ready(function() {
         if (isValid) {
             showNotification('Account created successfully! Welcome to our community!', 'success');
             // Here you would typically submit the form to your backend
-            console.log('Signup data:', { firstname, lastname, email, password });
+            console.log('Signup data:', { email, password });
             
             // Clear form and go back to login
             setTimeout(() => {
@@ -1059,40 +1037,20 @@ $(document).ready(function() {
 
     function validateSignupField(fieldType, value) {
         switch (fieldType) {
-            case 'firstname':
-                if (!value.trim()) {
-                    showLoginPageSignupError('firstname-error', 'First name is required');
-                    return false;
-                } else if (value.trim().length < 2) {
-                    showLoginPageSignupError('firstname-error', 'First name must be at least 2 characters');
-                    return false;
-                } else {
-                    clearLoginPageSignupError('firstname-error');
-                    return true;
-                }
-                
-            case 'lastname':
-                if (!value.trim()) {
-                    showLoginPageSignupError('lastname-error', 'Last name is required');
-                    return false;
-                } else if (value.trim().length < 2) {
-                    showLoginPageSignupError('lastname-error', 'Last name must be at least 2 characters');
-                    return false;
-                } else {
-                    clearLoginPageSignupError('lastname-error');
-                    return true;
-                }
                 
             case 'email':
-                if (!value) {
+                if (!value || value.trim() === '') {
                     showLoginPageSignupError('signup-email-error', 'Email address is required');
                     return false;
-                } else if (!isValidEmail(value)) {
-                    showLoginPageSignupError('signup-email-error', 'Please enter a valid email address');
-                    return false;
                 } else {
-                    clearLoginPageSignupError('signup-email-error');
-                    return true;
+                    const trimmedValue = value.trim();
+                    if (!isValidEmail(trimmedValue)) {
+                        showLoginPageSignupError('signup-email-error', 'Please enter a valid email address');
+                        return false;
+                    } else {
+                        clearLoginPageSignupError('signup-email-error');
+                        return true;
+                    }
                 }
                 
             case 'password':
@@ -1107,19 +1065,6 @@ $(document).ready(function() {
                     return false;
                 } else {
                     clearLoginPageSignupError('signup-password-error');
-                    return true;
-                }
-                
-            case 'confirm-password':
-                const password = $('#signup-password').val();
-                if (!value) {
-                    showLoginPageSignupError('confirm-password-error', 'Please confirm your password');
-                    return false;
-                } else if (password !== value) {
-                    showLoginPageSignupError('confirm-password-error', 'Passwords do not match');
-                    return false;
-                } else {
-                    clearLoginPageSignupError('confirm-password-error');
                     return true;
                 }
         }
@@ -1154,18 +1099,7 @@ $(document).ready(function() {
         }
     };
 
-    window.toggleSignupConfirmPassword = function() {
-        const passwordInput = $('#signup-confirm-password');
-        const icon = $('.password-toggle i').last();
-        
-        if (passwordInput.attr('type') === 'password') {
-            passwordInput.attr('type', 'text');
-            icon.removeClass('fa-eye').addClass('fa-eye-slash');
-        } else {
-            passwordInput.attr('type', 'password');
-            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-        }
-    };
+    // toggleSignupConfirmPassword function removed - confirm password field no longer exists
 
     // ===== RESPONSIVE HANDLING =====
     function initResponsiveHandling() {
