@@ -403,6 +403,127 @@
                 padding: 100px 20px 40px 20px;
             }
         }
+
+        /* Multi-step signup form styles */
+        .signup-step {
+            min-height: 400px;
+            display: block;
+        }
+        
+        .signup-form {
+            display: none;
+        }
+
+        .step-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .step-header h3 {
+            color: var(--primary-color);
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .step-header p {
+            font-size: 16px;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-option:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 107, 157, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.2);
+        }
+
+        .radio-option:hover label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+
+        .radio-option label {
+            color: var(--text-dark);
+            font-weight: 500;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .radio-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 107, 157, 0.1);
+        }
+
+        .step-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .back-btn {
+            background: #f8f9fa;
+            color: var(--text-dark);
+            border: 2px solid #e0e0e0;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #e9ecef;
+            border-color: var(--primary-color);
+        }
+
+        .step-navigation .signin-btn {
+            margin: 0;
+        }
+
+        /* Ensure radio option hover effects work on all devices */
+        @media (max-width: 768px) {
+            .radio-option:hover {
+                border-color: var(--primary-color) !important;
+                background-color: rgba(255, 107, 157, 0.1) !important;
+                transform: translateY(-2px) !important;
+                box-shadow: 0 4px 12px rgba(255, 107, 157, 0.2) !important;
+            }
+            
+            .radio-option:hover label {
+                color: var(--primary-color) !important;
+                font-weight: 600 !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -624,38 +745,157 @@
                      </div>
 
                      <form class="signup-form-content" id="signupFormContent">
-
-                         <div class="form-group">
-                             <label for="signup-email">Email</label>
-                             <input type="email" id="signup-email" name="email" required>
-                             <div class="error-message" id="signup-email-error"></div>
-                         </div>
-
-                         <div class="form-group">
-                             <label for="signup-password">Password</label>
-                             <div class="password-field">
-                                 <input type="password" id="signup-password" name="password" required>
-                                 <button type="button" class="password-toggle" onclick="toggleSignupPassword()">
-                                     <i class="fas fa-eye"></i>
-                                 </button>
+                         <!-- Step 1: Have you ever tried online dating? -->
+                         <div class="signup-step" id="signup-step1">
+                             <div class="step-header">
+                                 <h3>Step 1 of 5</h3>
+                                 <p>Have you ever tried online dating?</p>
                              </div>
-                             <div class="error-message" id="signup-password-error"></div>
+                             <div class="radio-group">
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-new" name="signup-dating-experience" value="new">
+                                     <label for="signup-new">I'm new here</label>
+                                 </div>
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-once" name="signup-dating-experience" value="once">
+                                     <label for="signup-once">Once or twice</label>
+                                 </div>
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-pro" name="signup-dating-experience" value="pro">
+                                     <label for="signup-pro">I am an online dating pro</label>
+                                 </div>
+                             </div>
+                             <div class="error-message" id="signup-step1-error"></div>
                          </div>
 
-                         <div class="form-options">
-                             <div class="remember-me">
-                                 <input type="checkbox" id="terms" name="terms" required>
-                                 <label for="terms"></label>
-                                 <span for="terms">I agree to the <a href="#" style="color: var(--primary-color);">Terms & Conditions</a></span>
+                         <!-- Step 2: What are you looking for? -->
+                         <div class="signup-step" id="signup-step2" style="display: none;">
+                             <div class="step-header">
+                                 <h3>Step 2 of 5</h3>
+                                 <p>What are you looking for?</p>
+                             </div>
+                             <div class="radio-group">
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-relationship" name="signup-looking-for" value="relationship">
+                                     <label for="signup-relationship">Relationship</label>
+                                 </div>
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-friendship" name="signup-looking-for" value="friendship">
+                                     <label for="signup-friendship">Friendship</label>
+                                 </div>
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-adventure" name="signup-looking-for" value="adventure">
+                                     <label for="signup-adventure">Adventure</label>
+                                 </div>
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-unsure" name="signup-looking-for" value="unsure">
+                                     <label for="signup-unsure">I'm not sure yet</label>
+                                 </div>
+                             </div>
+                             <div class="error-message" id="signup-step2-error"></div>
+                             <div class="step-navigation">
+                                 <button type="button" class="back-btn" id="signup-back-to-step1">← Back</button>
                              </div>
                          </div>
 
-                         <button type="submit" class="signin-btn">Create Account</button>
+                         <!-- Step 3: I am -->
+                         <div class="signup-step" id="signup-step3" style="display: none;">
+                             <div class="step-header">
+                                 <h3>Step 3 of 5</h3>
+                                 <p>I am</p>
+                             </div>
+                             <div class="radio-group">
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-man" name="signup-identity" value="man">
+                                     <label for="signup-man">Man</label>
+                                 </div>
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-woman" name="signup-identity" value="woman">
+                                     <label for="signup-woman">Woman</label>
+                                 </div>
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-non-binary" name="signup-identity" value="non-binary">
+                                     <label for="signup-non-binary">Non-binary</label>
+                                 </div>
+                             </div>
+                             <div class="error-message" id="signup-step3-error"></div>
+                             <div class="step-navigation">
+                                 <button type="button" class="back-btn" id="signup-back-to-step2">← Back</button>
+                             </div>
+                         </div>
+
+                         <!-- Step 4: What are you looking for? (Partner preferences) -->
+                         <div class="signup-step" id="signup-step4" style="display: none;">
+                             <div class="step-header">
+                                 <h3>Step 4 of 5</h3>
+                                 <p>What are you looking for?</p>
+                             </div>
+                             <div class="radio-group">
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-looking-man" name="signup-partner-preference" value="man">
+                                     <label for="signup-looking-man">Man</label>
+                                 </div>
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-looking-woman" name="signup-partner-preference" value="woman">
+                                     <label for="signup-looking-woman">Woman</label>
+                                 </div>
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-looking-non-binary" name="signup-partner-preference" value="non-binary">
+                                     <label for="signup-looking-non-binary">Non-binary</label>
+                                 </div>
+                                 <div class="radio-option">
+                                     <input type="radio" id="signup-looking-anyone" name="signup-partner-preference" value="anyone">
+                                     <label for="signup-looking-anyone">Anyone</label>
+                                 </div>
+                             </div>
+                             <div class="error-message" id="signup-step4-error"></div>
+                             <div class="step-navigation">
+                                 <button type="button" class="back-btn" id="signup-back-to-step3">← Back</button>
+                             </div>
+                         </div>
+
+                         <!-- Step 5: Sign up here -->
+                         <div class="signup-step" id="signup-step5" style="display: none;">
+                             <div class="step-header">
+                                 <h3>Step 5 of 5</h3>
+                                 <p>Sign up here</p>
+                             </div>
+
+                             <div class="form-group">
+                                 <label for="signup-email">Email Address</label>
+                                 <input type="email" id="signup-email" name="email" required>
+                                 <div class="error-message" id="signup-email-error"></div>
+                             </div>
+
+                             <div class="form-group">
+                                 <label for="signup-password">Password</label>
+                                 <div class="password-field">
+                                     <input type="password" id="signup-password" name="password" required>
+                                     <button type="button" class="password-toggle" onclick="toggleSignupPassword()">
+                                         <i class="fas fa-eye"></i>
+                                     </button>
+                                 </div>
+                                 <div class="error-message" id="signup-password-error"></div>
+                             </div>
+
+
+                             <div class="form-options">
+                                 <div class="remember-me">
+                                     <input type="checkbox" id="signup-terms" name="terms" required>
+                                     <label for="signup-terms"></label>
+                                     <span for="signup-terms">I accept the <a href="#" style="color: var(--primary-color);">Terms & Conditions</a> and <a href="#" style="color: var(--primary-color);">User Agreement</a></span>
+                                 </div>
+                             </div>
+                             <div class="error-message" id="signup-terms-error"></div>
+
+                             <div class="step-navigation">
+                                 <button type="submit" class="signin-btn">Sign Up</button>
+                             </div>
+                         </div>
                      </form>
-
                      <div class="back-to-login">
-                         <a href="#" id="backToLoginFromSignup">← Back to login</a>
-                     </div>
+                        <a href="#" id="backToLoginFromSignup">← Back to login</a>
+                    </div>
                  </div>
              </div>
 

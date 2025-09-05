@@ -473,7 +473,7 @@ $(document).ready(function() {
             });
 
             // Back to login functionality
-            $('#backToLogin').click(function(e) {
+            $('#backToLogin, #backToLoginFromSignup').click(function(e) {
                 e.preventDefault();
                 $('#forgotPasswordForm').hide();
                 $('.login-form-wrapper').show();
@@ -787,28 +787,128 @@ $(document).ready(function() {
             showLoginForm();
         });
 
+        // Multi-step signup form navigation
+        initMultiStepSignup();
+
         // Signup form validation
         $('#signupFormContent').submit(function(e) {
             e.preventDefault();
-            validateLoginPageSignupForm();
-        });
-
-        // Real-time validation for signup form
-        $('#signup-email').on('blur', function() {
-            validateSignupField('email', $(this).val());
-        });
-
-        $('#signup-password').on('blur', function() {
-            validateSignupField('password', $(this).val());
+            validateFinalSignupForm();
         });
 
     }
 
     function showSignupForm() {
+        console.log('Showing signup form');
         $('.login-form-wrapper').hide();
         $('.signup-prompt').hide();
         $('#forgotPasswordForm').hide();
         $('#signupForm').show();
+        // Reset to step 1
+        showSignupStep(1);
+    }
+
+    function initMultiStepSignup() {
+        console.log('Initializing multi-step signup');
+        
+        // Use event delegation to handle dynamically created elements
+        $(document).on('change', 'input[name="signup-dating-experience"]', function() {
+            console.log('Step 1 radio changed:', $(this).val());
+            if ($(this).is(':checked')) {
+                // Add selected class to parent radio-option
+                $(this).closest('.radio-option').addClass('selected');
+                showSignupStep(2);
+            }
+        });
+
+        // Step 2: What are you looking for
+        $(document).on('change', 'input[name="signup-looking-for"]', function() {
+            console.log('Step 2 radio changed:', $(this).val());
+            if ($(this).is(':checked')) {
+                // Add selected class to parent radio-option
+                $(this).closest('.radio-option').addClass('selected');
+                showSignupStep(3);
+            }
+        });
+
+        // Step 3: Identity selection
+        $(document).on('change', 'input[name="signup-identity"]', function() {
+            console.log('Step 3 radio changed:', $(this).val());
+            if ($(this).is(':checked')) {
+                // Add selected class to parent radio-option
+                $(this).closest('.radio-option').addClass('selected');
+                showSignupStep(4);
+            }
+        });
+
+        // Step 4: Partner preference
+        $(document).on('change', 'input[name="signup-partner-preference"]', function() {
+            console.log('Step 4 radio changed:', $(this).val());
+            if ($(this).is(':checked')) {
+                // Add selected class to parent radio-option
+                $(this).closest('.radio-option').addClass('selected');
+                showSignupStep(5);
+            }
+        });
+
+        // Back button functionality
+        $(document).on('click', '#signup-back-to-step1', function() {
+            console.log('Back to step 1');
+            showSignupStep(1);
+        });
+
+        $(document).on('click', '#signup-back-to-step2', function() {
+            console.log('Back to step 2');
+            showSignupStep(2);
+        });
+
+        $(document).on('click', '#signup-back-to-step3', function() {
+            console.log('Back to step 3');
+            showSignupStep(3);
+        });
+
+
+        // Real-time validation for step 5 fields
+        $(document).on('blur', '#signup-nickname', function() {
+            validateSignupField('nickname', $(this).val());
+        });
+
+        $(document).on('blur', '#signup-email', function() {
+            validateSignupField('email', $(this).val());
+        });
+
+        $(document).on('blur', '#signup-password', function() {
+            validateSignupField('password', $(this).val());
+        });
+
+        
+        // Also add click handlers for radio options as backup
+        $(document).on('click', '.radio-option', function() {
+            const radioInput = $(this).find('input[type="radio"]');
+            if (radioInput.length) {
+                radioInput.prop('checked', true);
+                radioInput.trigger('change');
+            }
+        });
+    }
+
+    function showSignupStep(stepNumber) {
+        console.log('Showing signup step:', stepNumber);
+        
+        // Hide all steps
+        $('.signup-step').hide();
+        
+        // Show the requested step
+        $('#signup-step' + stepNumber).show();
+        
+        // Clear any previous errors
+        clearAllSignupErrors();
+        
+        // Clear selected classes from radio options
+        $('.radio-option').removeClass('selected');
+        
+        // Re-add selected class to checked radio buttons
+        $('input[type="radio"]:checked').closest('.radio-option').addClass('selected');
     }
 
     // Make showSignupForm available globally for mobile menu
@@ -828,113 +928,139 @@ $(document).ready(function() {
         $('.signup-prompt').show();
     }
 
-    function validateLoginPageSignupForm() {
-        const email = $('#signup-email').val();
-        const password = $('#signup-password').val();
-        const terms = $('#terms').is(':checked');
-        
-        // Debug: console.log('Form values:', { email, password, terms });
-        
+    function validateFinalSignupForm() {
+        // Validate all steps
         let isValid = true;
-
+        
         // Clear previous errors
-        clearLoginPageSignupErrors();
-
+        clearAllSignupErrors();
+        
+        // Validate step 1: Dating experience
+        if (!$('input[name="signup-dating-experience"]:checked').length) {
+            showSignupError('signup-step1-error', 'Please select your dating experience');
+            isValid = false;
+        }
+        
+        // Validate step 2: Looking for
+        if (!$('input[name="signup-looking-for"]:checked').length) {
+            showSignupError('signup-step2-error', 'Please select what you are looking for');
+            isValid = false;
+        }
+        
+        // Validate step 3: Identity
+        if (!$('input[name="signup-identity"]:checked').length) {
+            showSignupError('signup-step3-error', 'Please select your identity');
+            isValid = false;
+        }
+        
+        // Validate step 4: Partner preference
+        if (!$('input[name="signup-partner-preference"]:checked').length) {
+            showSignupError('signup-step4-error', 'Please select your partner preference');
+            isValid = false;
+        }
+        
+        // Validate step 5: Form fields
+        const email = $('#signup-email').val().trim();
+        const password = $('#signup-password').val();
+        const termsAccepted = $('#signup-terms').is(':checked');
+        
         // Validate email
-        if (!email || email.trim() === '') {
-            showLoginPageSignupError('signup-email-error', 'Email address is required');
+        if (!email || !isValidEmail(email)) {
+            showSignupError('signup-email-error', 'Please enter a valid email address');
             isValid = false;
-        } else {
-            const trimmedEmail = email.trim();
-            if (!isValidEmail(trimmedEmail)) {
-                showLoginPageSignupError('signup-email-error', 'Please enter a valid email address');
-                isValid = false;
-            } else {
-                clearLoginPageSignupError('signup-email-error');
-            }
         }
-
+        
         // Validate password
-        if (!password) {
-            showLoginPageSignupError('signup-password-error', 'Password is required');
-            isValid = false;
-        } else if (password.length < 6) {
-            showLoginPageSignupError('signup-password-error', 'Password must be at least 6 characters long');
-            isValid = false;
-        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-            showLoginPageSignupError('signup-password-error', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+        if (!password || password.length < 8) {
+            showSignupError('signup-password-error', 'Password must be at least 8 characters long');
             isValid = false;
         }
-
+        
         // Validate terms
-        if (!terms) {
-            showNotification('Please accept the Terms & Conditions to continue', 'error');
+        if (!termsAccepted) {
+            showSignupError('signup-terms-error', 'You must accept the Terms & Conditions and User Agreement');
             isValid = false;
         }
-
+        
         if (isValid) {
-            showNotification('Account created successfully! Welcome to our community!', 'success');
-            // Here you would typically submit the form to your backend
-            console.log('Signup data:', { email, password });
+            // Show success message
+            showNotification('Account created successfully! Welcome to our dating platform!', 'success');
             
-            // Clear form and go back to login
+            // Reset form
+            $('#signupFormContent')[0].reset();
+            
+            // Go back to login form
             setTimeout(() => {
-                $('#signupFormContent')[0].reset();
                 showLoginForm();
             }, 2000);
         }
-
+        
         return isValid;
     }
 
     function validateSignupField(fieldType, value) {
         switch (fieldType) {
+            case 'nickname':
+                if (!value || value.trim() === '') {
+                    showSignupError('signup-nickname-error', 'Nickname is required');
+                    return false;
+                } else if (value.trim().length < 2) {
+                    showSignupError('signup-nickname-error', 'Nickname must be at least 2 characters long');
+                    return false;
+                } else {
+                    clearSignupError('signup-nickname-error');
+                    return true;
+                }
+                break;
                 
             case 'email':
                 if (!value || value.trim() === '') {
-                    showLoginPageSignupError('signup-email-error', 'Email address is required');
+                    showSignupError('signup-email-error', 'Email address is required');
                     return false;
                 } else {
                     const trimmedValue = value.trim();
                     if (!isValidEmail(trimmedValue)) {
-                        showLoginPageSignupError('signup-email-error', 'Please enter a valid email address');
+                        showSignupError('signup-email-error', 'Please enter a valid email address');
                         return false;
                     } else {
-                        clearLoginPageSignupError('signup-email-error');
+                        clearSignupError('signup-email-error');
                         return true;
                     }
                 }
+                break;
                 
             case 'password':
                 if (!value) {
-                    showLoginPageSignupError('signup-password-error', 'Password is required');
+                    showSignupError('signup-password-error', 'Password is required');
                     return false;
-                } else if (value.length < 6) {
-                    showLoginPageSignupError('signup-password-error', 'Password must be at least 6 characters long');
-                    return false;
-                } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
-                    showLoginPageSignupError('signup-password-error', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+                } else if (value.length < 8) {
+                    showSignupError('signup-password-error', 'Password must be at least 8 characters long');
                     return false;
                 } else {
-                    clearLoginPageSignupError('signup-password-error');
+                    clearSignupError('signup-password-error');
                     return true;
                 }
+                break;
+                
+                
+            default:
+                return true;
         }
     }
 
-    function showLoginPageSignupError(errorId, message) {
+    function showSignupError(errorId, message) {
         $('#' + errorId).text(message).addClass('show');
-        $('#' + errorId).closest('.form-group').addClass('error');
+        $('#' + errorId).closest('.form-group, .signup-step').addClass('error');
     }
 
-    function clearLoginPageSignupError(errorId) {
+    function clearSignupError(errorId) {
         $('#' + errorId).text('').removeClass('show');
-        $('#' + errorId).closest('.form-group').removeClass('error');
+        $('#' + errorId).closest('.form-group, .signup-step').removeClass('error');
     }
 
-    function clearLoginPageSignupErrors() {
+    function clearAllSignupErrors() {
         $('.error-message').text('').removeClass('show');
-        $('.form-group').removeClass('error');
+        $('.form-group, .signup-step').removeClass('error');
     }
 
     // Password toggle functions for signup form
@@ -951,7 +1077,6 @@ $(document).ready(function() {
         }
     };
 
-    // toggleSignupConfirmPassword function removed - confirm password field no longer exists
 
     // ===== RESPONSIVE HANDLING =====
     function initResponsiveHandling() {
